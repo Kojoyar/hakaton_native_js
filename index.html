@@ -147,7 +147,51 @@
     </div>
 
     <!-- content  -->
-    <div class="d-flex flex-wrap justify-content-center" id="prosts-list">
+    <!-- modal for posts -->
+
+    <!-- button trigger -->
+    <div class="d-flex justify-content-center mt-2">
+        <button class="btn btn-primary mx-3" data-bs-toggle="modal"
+        data-bs-target="#staticBackdropPost">Add</button>
+        <button class="btn btn-primary mx-3" data-bs-toggle="modal"
+        data-bs-target="#staticBackdropPost">Change</button>
+    </div>
+    <!-- Modal body -->
+
+<div class="modal fade" id="staticBackdropPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropPostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropPostLabel">Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <!-- for create -->
+                <div class="d-flex flex-column w-100 align-items-center" id="postCreate-modal-block">
+                    <h2>Create post</h2>
+                    <input type="text" id="postCreate-title" placeholder="Title" class="mb-2 w-100 form-control">
+                    <input type="text" id="postCreate-content" placeholder="Content" class="mb-2 w-100 form-control">
+                    <input type="text" id="postCreate-image" placeholder="Image url" class="mb-2 w-100 form-control">
+                </div>
+
+                <!-- for change -->
+                <div class="d-flex flex-column w-100 align-items-center" id="postChange-modal-block">
+                    <h2>Change post</h2>
+                    <input type="text" id="postChange-title" placeholder="Title" class="mb-2 w-100 form-control">
+                    <input type="text" id="postChange-content" placeholder="Content" class="mb-2 w-100 form-control">
+                    <input type="text" id="postChange-image" placeholder="Image url" class="mb-2 w-100 form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" id="createPost-btn">Create Post</button>
+                <button type="button" class="btn btn-dark" id="changePost-btn">Change Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="d-flex flex-wrap justify-content-center" id="products-list">
 
     </div>
 
