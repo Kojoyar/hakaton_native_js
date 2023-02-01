@@ -66,7 +66,7 @@ async function registerUser() {
     password: passwordInp.value,
     isAdmin: isAdminInp.checked,
     favorites: [],
-    saved: []
+    saved: [],
   };
 
   fetch(USERS_API, {
@@ -153,7 +153,13 @@ async function loginUser() {
     return;
   }
 
-  setUserToStorage(userObj.username, userObj.isAdmin, userObj.id, userObj.favorites, userObj.saved);
+  setUserToStorage(
+    userObj.username,
+    userObj.isAdmin,
+    userObj.id,
+    userObj.favorites,
+    userObj.saved
+  );
 
   loginUsernameInp = "";
   passUsernameInp = "";
@@ -163,7 +169,7 @@ async function loginUser() {
 
   closeRegisterModalBtn.click();
 
-    render();
+  render();
 }
 
 loginUserBtn.addEventListener("click", loginUser);
@@ -236,14 +242,14 @@ async function createPost() {
   }
 
   let postObj = {
-      title: createPostTitle.value,
-      content: createPostContent.value,
-      url: createPostImg.value,
-      likes: 0,
-      author: {
-          id: user.id,
-          name: user.username,
-      }
+    title: createPostTitle.value,
+    content: createPostContent.value,
+    url: createPostImg.value,
+    likes: 0,
+    author: {
+      id: user.id,
+      name: user.username,
+    },
   };
 
   fetch(POSTS_API, {
@@ -256,7 +262,7 @@ async function createPost() {
   createPostContent.value = "";
   createPostImg.value = "";
 
-  render()
+  render();
 
   closeModalPostBtn.click();
 }
@@ -273,7 +279,6 @@ async function render() {
   postsBlock.innerHTML = "";
 
   let posts = await getPostsData();
-  // console.log(posts);
   if (posts.length === 0) return;
 
   posts.forEach((item) => {
@@ -287,8 +292,9 @@ async function render() {
                 <p class="username">${item.author.name}</p>
             </div>
             <!-- Edit Delete -->
-            ${checkUserForCreatePost() == item.author.id? 
-              `<div class="dropdown">
+            ${
+              checkUserForCreatePost() == item.author.id
+                ? `<div class="dropdown">
               <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
               <i class="fas fa-ellipsis-h"></i>
               </a>
@@ -299,13 +305,14 @@ async function render() {
               </ul>
               </div>
               `
-              :
-              '' 
+                : ""
             }
 
         </div>
         <div class="d-flex flex-wrap justify-content-center align-items-center" >
-        <img src="${item.url}" class="post-image mr-5" width='400' height='400' alt="">
+        <img src="${
+          item.url
+        }" class="post-image mr-5" width='400' height='400' alt="">
         </div>
         <div class="post-content">
             <div class="reaction-wrapper">
@@ -315,8 +322,8 @@ async function render() {
                 <img src="assets/img/save.PNG" class="save icon" alt="">
             </div>
             <p class="likes">${item.likes} likes</p>
-            <p>${ item.title }</p>
-            <p class="description">${ item.content }</p>
+            <p>${item.title}</p>
+            <p class="description">${item.content}</p>
             <p class="post-time">${new Date()}</p>
         </div>
         <div class="comment-wrapper">
@@ -326,20 +333,16 @@ async function render() {
         </div>
         <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
     </div>
-        `
-    });
+        `;
+  });
 
-    addDeleteEvent();
-    editModalEvent ();
-    addEditEvent();
-    // addLikeEvent();
-    // addDislikeEvent();
-    
-};
-        
-
-
-
+  addDeleteEvent();
+  editModalEvent();
+  addEditEvent();
+  savePostFunc();
+  // addLikeEvent();
+  // addDislikeEvent();
+}
 
 changePostModalBtn.addEventListener("click", () => {
   createModalBlock.setAttribute("style", "display: none !important;");
@@ -347,18 +350,15 @@ changePostModalBtn.addEventListener("click", () => {
   changeModalBlock.setAttribute("style", "display: flex !important");
   changePostBtn.setAttribute("style", "display: flex !important");
 });
-  let editBtns = document.querySelectorAll('.post_edit');
-  
-  editBtns.forEach(item => item.addEventListener('click', () => {
-    createModalBlock.setAttribute('style', 'display: none !important;');
-    createPostBtn.setAttribute('style', 'display: none !important;');
-    changeModalBlock.setAttribute('style', 'display: flex !important');
-    changePostBtn.setAttribute('style', 'display: flex !important');
-  }))
+createPostModalBtn.addEventListener("click", () => {
+  createModalBlock.setAttribute("style", "display: flex !important;");
+  createPostBtn.setAttribute("style", "display: flex !important;");
+  changeModalBlock.setAttribute("style", "display: none !important");
+  changePostBtn.setAttribute("style", "display: none !important");
+});
 
 function editModalEvent() {
-  let editBtns = document.querySelectorAll(".btn-edit");
-
+  let editBtns = document.querySelectorAll(".post_edit");
   editBtns.forEach((item) =>
     item.addEventListener("click", () => {
       createModalBlock.setAttribute("style", "display: none !important;");
@@ -369,16 +369,16 @@ function editModalEvent() {
   );
 }
 
-render()
+render();
 
 //delete
-function addDeleteEvent () {
-  let delBtns = document.querySelectorAll('.post_delete');
-  delBtns.forEach(item => item.addEventListener('click', deletePost))
-};
+function addDeleteEvent() {
+  let delBtns = document.querySelectorAll(".post_delete");
+  delBtns.forEach((item) => item.addEventListener("click", deletePost));
+}
 
-async function deletePost (e) {
-  let postId = e.target.id.split('-')[1];
+async function deletePost(e) {
+  let postId = e.target.id.split("-")[1];
   await fetch(`${POSTS_API}/${postId}`, {
     method: "DELETE",
   });
@@ -390,8 +390,8 @@ async function deletePost (e) {
 let saveBtn = document.querySelector("#changePost-btn");
 
 function addEditEvent() {
-  let editBtns = document.querySelectorAll('.post_edit');
-  editBtns.forEach(item => item.addEventListener('click', addPostDataToForm))
+  let editBtns = document.querySelectorAll(".post_edit");
+  editBtns.forEach((item) => item.addEventListener("click", addPostDataToForm));
 }
 
 async function addPostDataToForm(e) {
@@ -406,7 +406,7 @@ async function addPostDataToForm(e) {
 
   saveBtn.setAttribute("id", postObj.id);
 }
-};
+
 saveBtn.addEventListener("click", saveChanges);
 
 async function saveChanges(e) {
@@ -425,12 +425,11 @@ async function saveChanges(e) {
     },
   });
 
+  changePostTitle.value = "";
+  changePostContent.value = "";
+  changePostImg.value = "";
 
-  changePostTitle.value = '';
-  changePostContent.value = '';
-  changePostImg.value = '';
-
-  saveBtn.removeAttribute('id');
+  saveBtn.removeAttribute("id");
   closeModalPostBtn.click();
 
   render();
@@ -440,23 +439,111 @@ async function saveChanges(e) {
 function setPostsToStorage(product) {
   localStorage.setItem("user", JSON.stringify(product));
 }
-async function saveBtnToLocaleStorage() {
+async function saveBtnToLocaleStorage(e) {
   let postId = e.target.id.split("-")[1];
   let res = await fetch(POSTS_API);
   let posts = await res.json();
-  let postObj = await posts.find((i) => i.id == postId);
+  let postObj = await posts.find((item) => item.id == postId);
 
   let post = await getUserFromStorage();
-  console.log(post);
-  setPostsToStorage(postObj);
 
+  if (!postObj) {
+    await fetch(`${POSTS_API}/${postId}`, {
+      method: "PATCH",
+      body: JSON.stringify(postObj),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    });
+
+    let saved = post.saved.filter((item) => item.id != postId);
+    post.saved = saved;
+    setPostsToStorage(post);
+    render();
+    return;
+  }
+  if (postObj) {
+    post.saved.push(postObj);
+    setPostsToStorage(post);
+    await fetch(`${POSTS_API}/${postId}`, {
+      method: "PATCH",
+      body: JSON.stringify(postObj),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    });
+  }
   render();
 }
 
 function savePostFunc() {
-  let savePostBtns = document.querySelectorAll("#save-post");
-  console.log(savePostBtns);
+  let savePostBtns = document.querySelectorAll(".save-post");
   savePostBtns.forEach((item) =>
     item.addEventListener("click", saveBtnToLocaleStorage)
   );
 }
+
+let saveContent = document.querySelector("#modal-posts");
+async function lookSavedPostsFunc() {
+  saveContent.innerHTML = "";
+  let user = getUserFromStorage();
+  let saved = user.saved;
+  saved.forEach((item) => {
+    saveContent.innerHTML += `
+    <div class="post">
+    <div class="info">
+        <div class="user">
+            <div class="profile-pic">
+                <img src="${item.author.image}" alt="">
+            </div>
+            <p class="username">${item.author.name}</p>
+        </div>
+        <!-- Edit Delete -->
+        ${
+          checkUserForCreatePost() == item.author.id
+            ? `<div class="dropdown">
+          <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
+          <i class="fas fa-ellipsis-h"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li><a id="edit-${item.id}" data-bs-toggle="modal"
+          data-bs-target="#staticBackdropPost" class="dropdown-item post_edit" href="#">Edit</a></li>
+          <li><a class="dropdown-item post_delete" id="del-${item.id}" href="#">Delete</a></li>
+          </ul>
+          </div>
+          `
+            : ""
+        }
+
+    </div>
+    <div class="d-flex flex-wrap justify-content-center align-items-center" >
+    <img src="${
+      item.url
+    }" class="post-image mr-5" width='400' height='400' alt="">
+    </div>
+    <div class="post-content">
+        <div class="reaction-wrapper">
+            <img src="assets/img/like.PNG" class="icon" alt="">
+            <img src="assets/img/comment.PNG" class="icon" alt="">
+            <img src="assets/img/send.PNG" class="icon" alt="">
+            <img src="assets/img/save.PNG" class="save icon" alt="">
+        </div>
+        <p class="likes">${item.likes} likes</p>
+        <p>${item.title}</p>
+        <p class="description">${item.content}</p>
+        <p class="post-time">${new Date()}</p>
+    </div>
+    <div class="comment-wrapper">
+        <img src="assets/img/smile.PNG" class="icon" alt="">
+        <input type="text" class="comment-box" placeholder="Add a comment">
+        <button class="comment-btn">Post</button>
+    </div>
+    <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
+</div>
+    `;
+  });
+}
+
+let lookSavedPosts = document.querySelector(".btn-saved");
+console.log(lookSavedPosts);
+lookSavedPosts.addEventListener("click", lookSavedPostsFunc);

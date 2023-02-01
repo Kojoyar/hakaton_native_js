@@ -1,4 +1,44 @@
 {
-  "users": [],
-  "posts": []
+  "users": [
+    {
+      "username": "Jika",
+      "age": "27",
+      "password": "pass",
+      "isAdmin": false,
+      "favorites": [],
+      "saved": [],
+      "id": 1
+    },
+    {
+      "username": "Kojo",
+      "age": "17",
+      "password": "pass",
+      "isAdmin": true,
+      "favorites": [],
+      "saved": [],
+      "id": 2
+    },
+    {
+      "username": "Jack",
+      "age": "17",
+      "password": "pass",
+      "isAdmin": true,
+      "favorites": [],
+      "saved": [],
+      "id": 3
+    }
+  ],
+  "posts": [
+    {
+      "title": "sd",
+      "content": "sd",
+      "url": "https://tinypng.com/images/social/website.jpg",
+      "likes": 0,
+      "author": {
+        "id": 2,
+        "name": "Kojo"
+      },
+      "id": 1
+    }
+  ]
 }

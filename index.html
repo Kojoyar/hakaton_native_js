@@ -80,7 +80,6 @@
             </nav>
         </div>
     </nav>
-
     <!-- modal for users  -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -152,56 +151,82 @@
     <!-- button trigger -->
     <div class="d-flex justify-content-center mt-2" id="btns-block">
         <button class="btn btn-primary mx-3" id="createPostModal-btn" data-bs-toggle="modal"
-        data-bs-target="#staticBackdropPost">Create Post</button>
+            data-bs-target="#staticBackdropPost">Create Post</button>
         <button class="btn btn-primary mx-3" id="changePostModal-btn" data-bs-toggle="modal"
-        data-bs-target="#staticBackdropPost">Change Post</button>
+            data-bs-target="#staticBackdropPost">Change Post</button>
     </div>
     <!-- Modal body -->
 
-<div class="modal fade" id="staticBackdropPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropPostLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropPostLabel">Post</h5>
-                <button type="button" class="btn-close-postModal" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-            </div>
-            <div class="modal-body">
-                <!-- for create -->
-                <div class="d-flex flex-column w-100 align-items-center" id="postCreate-modal-block">
-                    <h2>Create post</h2>
-                    <input type="text" id="postCreate-title" placeholder="Title" class="mb-2 w-100 form-control">
-                    <input type="text" id="postCreate-content" placeholder="Content" class="mb-2 w-100 form-control">
-                    <input type="text" id="postCreate-image" placeholder="Image url" class="mb-2 w-100 form-control">
+    <div class="modal fade" id="staticBackdropPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropPostLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropPostLabel">Post</h5>
+                    <button type="button" class="btn-close-postModal" data-bs-dismiss="modal"
+                        aria-label="Закрыть"></button>
                 </div>
+                <div class="modal-body">
+                    <!-- for create -->
+                    <div class="d-flex flex-column w-100 align-items-center" id="postCreate-modal-block">
+                        <h2>Create post</h2>
+                        <input type="text" id="postCreate-title" placeholder="Title" class="mb-2 w-100 form-control">
+                        <input type="text" id="postCreate-content" placeholder="Content"
+                            class="mb-2 w-100 form-control">
+                        <input type="text" id="postCreate-image" placeholder="Image url"
+                            class="mb-2 w-100 form-control">
+                    </div>
 
-                <!-- for change -->
-                <div class="d-flex flex-column w-100 align-items-center" id="postChange-modal-block">
-                    <h2>Change post</h2>
-                    <input type="text" id="postChange-title" placeholder="Title" class="mb-2 w-100 form-control">
-                    <input type="text" id="postChange-content" placeholder="Content" class="mb-2 w-100 form-control">
-                    <input type="text" id="postChange-image" placeholder="Image url" class="mb-2 w-100 form-control">
+                    <!-- for change -->
+                    <div class="d-flex flex-column w-100 align-items-center" id="postChange-modal-block">
+                        <h2>Change post</h2>
+                        <input type="text" id="postChange-title" placeholder="Title" class="mb-2 w-100 form-control">
+                        <input type="text" id="postChange-content" placeholder="Content"
+                            class="mb-2 w-100 form-control">
+                        <input type="text" id="postChange-image" placeholder="Image url"
+                            class="mb-2 w-100 form-control">
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark" id="createPost-btn">Create Post</button>
-                <button type="button" class="btn btn-dark" id="changePost-btn">Save Changes Post</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" id="createPost-btn">Create Post</button>
+                    <button type="button" class="btn btn-dark" id="changePost-btn">Save Changes Post</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <div class="d-flex flex-wrap justify-content-center" id="posts-list">
 
     </div>
 
+    <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn-saved">Posts Saved</a>
+    <!-- modal for posts  -->
+    <!-- Модальное окно -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Заголовок модального окна</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div id="modal-posts" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- card-content  -->
     <div class="card-content d-flex justify-content-center align-items-center">
         <div data-aos="fade-right" data-aos-duration="1500" class="card mt-5" style="width: 28rem;">
             <img src="./image/card-content-img.jpg" height="400px" class="card-img-top" alt="...">
             <div class="card-body">
                 <p class="card-text">Небольшой пример текста, который должен основываться на названии карточки и
-                    составлять основную часть содержимого карточки.Небольшой пример текста, который должен основываться
+                    составлять основную часть содержимого карточки.Небольшой пример текста, который должен
+                    основываться
                     на названии карточки и
                     составлять основную часть содержимого карточки.</p>
             </div>

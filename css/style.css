@@ -188,3 +188,8 @@
 .footer__img {
   padding-left: 0.5rem;
 }
+.btn-saved {
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+}
