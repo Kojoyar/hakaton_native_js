@@ -65,6 +65,8 @@ async function registerUser() {
     age: ageInp.value,
     password: passwordInp.value,
     isAdmin: isAdminInp.checked,
+    favorites: [],
+    saved: []
   };
 
   fetch(USERS_API, {
@@ -112,13 +114,15 @@ function checkUserPassword(user, password) {
   return user.password === password;
 }
 
-function setUserToStorage(username, isAdmin) {
+function setUserToStorage(username, isAdmin, id, favorites, saved) {
   localStorage.setItem(
     "user",
     JSON.stringify({
       username,
       isAdmin,
-      id: Date.now()
+      id,
+      favorites,
+      saved
     })
   );
 }
@@ -148,7 +152,7 @@ async function loginUser() {
     return;
   }
 
-  setUserToStorage(userObj.username, userObj.isAdmin);
+  setUserToStorage(userObj.username, userObj.isAdmin, userObj.id, userObj.favorites, userObj.saved);
 
   loginUsernameInp = "";
   passUsernameInp = "";
@@ -158,7 +162,7 @@ async function loginUser() {
 
   closeRegisterModalBtn.click();
 
-  //   render();
+    render();
 }
 
 loginUserBtn.addEventListener("click", loginUser);
@@ -167,7 +171,7 @@ loginUserBtn.addEventListener("click", loginUser);
 logoutUserBtn.addEventListener("click", () => {
   localStorage.removeItem("user");
   checkLoginLogoutStatus();
-  // render();
+  render();
 });
 
 // logic for CRUD 
@@ -240,7 +244,7 @@ async function createPost () {
       likes: 0,
       author: {
           id: user.id,
-          name: user.username
+          name: user.username,
       }
   };
 
@@ -254,7 +258,7 @@ async function createPost () {
   createPostContent.value = '';
   createPostImg.value = '';
 
-  // render()
+  render()
 
   closeModalPostBtn.click()
 
@@ -282,22 +286,29 @@ async function render () {
         <div class="info">
             <div class="user">
                 <div class="profile-pic">
-                    <img src="" alt="">
+                    <img src="${item.author.image}" alt="">
                 </div>
                 <p class="username">${ item.author.name }</p>
             </div>
             <!-- Edit Delete -->
-            <div class="dropdown">
-                <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                    <i class="fas fa-ellipsis-h"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><a data-bs-toggle="modal" editLsData="${item.id}" data-bs-target="#edit-modal" class="dropdown-item post_edit" href="#">Edit</a></li>
-                <li><a class="dropdown-item post_delete" deleteLsData="${item.id}" href="#">Delete</a></li>
+            ${checkUserForCreatePost() == item.author.id? 
+              `<div class="dropdown">
+              <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-ellipsis-h"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a id="edit-${item.id}" data-bs-toggle="modal"
+              data-bs-target="#staticBackdropPost" class="dropdown-item post_edit" href="#">Edit</a></li>
+              <li><a class="dropdown-item post_delete" id="del-${item.id}" href="#">Delete</a></li>
               </ul>
               </div>
+              `
+              :
+              '' 
+            }
+
         </div>
-        <img src="${ item.url }" class="post-image" alt="">
+        <img src="${item.url}" class="post-image img-fluid img-thumbnail" width="100" height="200" alt="">
         <div class="post-content">
             <div class="reaction-wrapper">
                 <img src="assets/img/like.PNG" class="icon" alt="">
@@ -305,7 +316,7 @@ async function render () {
                 <img src="assets/img/send.PNG" class="icon" alt="">
                 <img src="assets/img/save.PNG" class="save icon" alt="">
             </div>
-            <p class="likes">89 likes</p>
+            <p class="likes">${item.likes} likes</p>
             <p>${ item.title }</p>
             <p class="description">${ item.content }</p>
             <p class="post-time">${new Date()}</p>
@@ -320,12 +331,13 @@ async function render () {
     });
 
     addDeleteEvent();
+    editModalEvent ();
     addEditEvent();
     // addLikeEvent();
     // addDislikeEvent();
-    editModalEvent ()
     
 };
+        
 
 createPostModalBtn.addEventListener('click', () => {
   createModalBlock.setAttribute('style', 'display: flex !important;');
@@ -343,7 +355,7 @@ changePostModalBtn.addEventListener('click', () => {
 
 function editModalEvent () {
 
-  let editBtns = document.querySelectorAll('.btn-edit');
+  let editBtns = document.querySelectorAll('.post_edit');
   
   editBtns.forEach(item => item.addEventListener('click', () => {
     createModalBlock.setAttribute('style', 'display: none !important;');
@@ -354,13 +366,12 @@ function editModalEvent () {
 
 };
 
-
 render()
 
 //delete
 
 function addDeleteEvent () {
-  let delBtns = document.querySelectorAll('.btn-delete');
+  let delBtns = document.querySelectorAll('.post_delete');
   delBtns.forEach(item => item.addEventListener('click', deletePost))
 };
 
@@ -380,7 +391,7 @@ async function deletePost (e) {
 let saveBtn = document.querySelector('#changePost-btn');
 
 function addEditEvent() {
-  let editBtns = document.querySelectorAll('.btn-edit');
+  let editBtns = document.querySelectorAll('.post_edit');
   editBtns.forEach(item => item.addEventListener('click', addPostDataToForm))
 }
 
@@ -397,7 +408,6 @@ async function addPostDataToForm(e) {
 
   saveBtn.setAttribute('id', postObj.id);
 
-  // checkCreateAndSaveBtn();
 };
 
 saveBtn.addEventListener('click', saveChanges)
@@ -420,11 +430,10 @@ async function saveChanges(e) {
 
   changePostTitle.value = '';
   changePostContent.value = '';
-  changePostImg.value
+  changePostImg.value = ''
 
-  // saveBtn.removeAttribute('id');
-
-  // checkCreateAndSaveBtn();
+  saveBtn.removeAttribute('id');
+  closeModalPostBtn.click();
 
   render();
 
