@@ -29,6 +29,7 @@ const USERS_API = "http://localhost:8000/users";
 // inputs group
 let usernameInp = document.querySelector("#reg-username");
 let ageInp = document.querySelector("#reg-age");
+let iconInp = document.querySelector("#reg-icon");
 let passwordInp = document.querySelector("#reg-password");
 let passwordConfirmInp = document.querySelector("#reg-passwordConfirm");
 let isAdminInp = document.querySelector("#isAdmin");
@@ -41,10 +42,11 @@ async function checkUniqeUsername(username) {
 // chekUniqeUsername();
 async function registerUser() {
   if (
-    !usernameInp.value.trim() &&
-    !ageInp.value.trim() &&
-    !passwordInp.value.trim() &&
-    !passwordConfirmInp.value.trim()
+    (!usernameInp.value.trim() &&
+      !ageInp.value.trim() &&
+      !passwordInp.value.trim() &&
+      !passwordConfirmInp.value.trim()) ||
+    !iconInp.value.trim()
   ) {
     alert("Some inputs are empty!");
     return;
@@ -65,6 +67,7 @@ async function registerUser() {
     age: ageInp.value,
     password: passwordInp.value,
     isAdmin: isAdminInp.checked,
+    icon: iconInp.value,
     favorites: [],
     saved: [],
   };
@@ -79,6 +82,7 @@ async function registerUser() {
 
   usernameInp.value = "";
   ageInp.value = "";
+  iconInp.value = "";
   passwordInp.value = "";
   passwordConfirmInp.value = "";
   isAdminInp.checked = "";
@@ -114,11 +118,12 @@ function checkUserPassword(user, password) {
   return user.password === password;
 }
 
-function setUserToStorage(username, isAdmin, id, favorites, saved) {
+function setUserToStorage(username, isAdmin, id, favorites, saved, icon) {
   localStorage.setItem(
     "user",
     JSON.stringify({
       username,
+      icon,
       isAdmin,
       favorites,
       saved,
@@ -158,7 +163,8 @@ async function loginUser() {
     userObj.isAdmin,
     userObj.id,
     userObj.favorites,
-    userObj.saved
+    userObj.saved,
+    userObj.icon
   );
 
   loginUsernameInp = "";
@@ -242,15 +248,16 @@ async function createPost() {
   }
 
   let postObj = {
-      title: createPostTitle.value,
-      content: createPostContent.value,
-      url: createPostImg.value,
-      likes: 0,
-      author: {
-          id: user.id,
-          name: user.username,
-      },
-      comments: []
+    title: createPostTitle.value,
+    content: createPostContent.value,
+    url: createPostImg.value,
+    likes: 0,
+    author: {
+      id: user.id,
+      name: user.username,
+      icon: user.icon,
+    },
+    comments: [],
   };
 
   fetch(POSTS_API, {
@@ -295,7 +302,9 @@ async function render() {
         <div class="info">
             <div class="user">
                 <div class="profile-pic">
-                    <img src="${item.author.image}" alt="">
+                    <img width='30px' height='30px' src="${
+                      item.author.icon
+                    }" alt="">
                 </div>
                 <p class="username">${item.author.name}</p>
             </div>
@@ -336,8 +345,9 @@ async function render() {
         </div>
         <hr>
         <!-- Likes -->
-        ${checkUserForCreatePost() ? 
-          `<button class="btn btn-primary like-btn" id="like-${item.id}">Like</button>
+        ${
+          checkUserForCreatePost()
+            ? `<button class="btn btn-primary like-btn" id="like-${item.id}">Like</button>
           <button class="btn btn-primary dislike-btn" id="dislike-${item.id}">DisLike</button>
           <div class="comment-wrapper">
             <img src="assets/img/smile.PNG" class="icon" alt="">
@@ -346,8 +356,7 @@ async function render() {
           </div>
           <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
           `
-          :
-          '' 
+            : ""
         }
         <div class="comment-container" id="commcontainer-${item.id}">
             <button class="btn btn-secondary read-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="read-${item.id}">
@@ -357,6 +366,7 @@ async function render() {
     </div>
         `;
   });
+
     addDeleteEvent();
     editModalEvent ();
     addEditEvent();
@@ -366,50 +376,51 @@ async function render() {
     likeBtnsChecks();
     addCommentEvent()
     addReadComments()
-    
+}
+
+
+function likeBtnsChecks() {
+  let user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+  // console.log(user.favorites);
+
+  let dislikeBtns = document.querySelectorAll(".dislike-btn");
+  // console.log(dislikeBtns);
+  let likeBtns = document.querySelectorAll(".like-btn");
+  // console.log(likeBtns);
+  let newArrDislike = [];
+  let newArrLike = [];
+
+  if (user.favorites) {
+    let newArrdisLikeBtns = [...dislikeBtns];
+    newArrdisLikeBtns.map(function (item) {
+      user.favorites.forEach((i) => {
+        if (item.id.split("-")[1] == i.id) {
+          console.log(item);
+          newArrDislike.push(item);
+        }
+      });
+    });
+    // console.log(newArr)
+    newArrdisLikeBtns.forEach((item) => {
+      item.setAttribute("style", "display: block !important");
+    });
+
+    let newArrLikeBtns = [...likeBtns];
+    newArrLikeBtns.map(function (item) {
+      user.favorites.forEach((i) => {
+        if (item.id.split("-")[1] == i.id) {
+          newArrLike.push(item);
+        }
+      });
+    });
+    console.log(newArrLike);
+    newArrLike.forEach((item) => {
+      item.setAttribute("style", "display: none !important");
+    });
+  }
 };
 
-function likeBtnsChecks () {
-  let user = JSON.parse(localStorage.getItem('user'));
-    if(!user) return
-    // console.log(user.favorites);
-
-    let dislikeBtns = document.querySelectorAll('.dislike-btn');
-    // console.log(dislikeBtns);
-    let likeBtns = document.querySelectorAll('.like-btn');
-    // console.log(likeBtns);
-    let newArrDislike = [];
-    let newArrLike = [];
-
-    if(user.favorites) {
-        let newArrdisLikeBtns = [...dislikeBtns];
-        newArrdisLikeBtns.map(function(item){
-            user.favorites.forEach(i => {
-                if(item.id.split('-')[1] == i.id) {
-                    console.log(item)
-                    newArrDislike.push(item)
-                }
-            })
-        })
-        // console.log(newArr)
-        newArrdisLikeBtns.forEach(item => {
-            item.setAttribute('style', 'display: block !important');
-        });
-
-        let newArrLikeBtns = [...likeBtns];
-        newArrLikeBtns.map(function(item){
-            user.favorites.forEach(i => {
-                if(item.id.split('-')[1] == i.id) {
-                    newArrLike.push(item)
-                }
-            })
-        })
-        console.log(newArrLike)
-        newArrLike.forEach(item => {
-            item.setAttribute('style', 'display: none !important');
-        });
-    } 
-}
 
 changePostModalBtn.addEventListener("click", () => {
   createModalBlock.setAttribute("style", "display: none !important;");
@@ -618,117 +629,107 @@ lookSavedPosts.addEventListener("click", lookSavedPostsFunc);
 
 //like
 
-function addLikeEvent () {
-  let likeBtns = document.querySelectorAll('.like-btn');
-  likeBtns.forEach(item => item.addEventListener('click', putLike))
+function addLikeEvent() {
+  let likeBtns = document.querySelectorAll(".like-btn");
+  likeBtns.forEach((item) => item.addEventListener("click", putLike));
 }
 
-function addDislikeEvent () {
-  let dislikeBtns = document.querySelectorAll('.dislike-btn');
-  dislikeBtns.forEach(item => item.addEventListener('click', putDislike))
+function addDislikeEvent() {
+  let dislikeBtns = document.querySelectorAll(".dislike-btn");
+  dislikeBtns.forEach((item) => item.addEventListener("click", putDislike));
 }
 
-async function putLike (e) {
-
-  let user = JSON.parse(localStorage.getItem('user'));
-  let postId = e.target.id.split('-')[1];
+async function putLike(e) {
+  let user = JSON.parse(localStorage.getItem("user"));
+  let postId = e.target.id.split("-")[1];
 
   let posts = await getPostsData();
-  let postObj = posts.find(item => item.id == postId);
+  let postObj = posts.find((item) => item.id == postId);
   // console.log(postObj);
 
-  function checkIfLiked (favorites, postId) {
-      let likedPost = favorites.find(item => item.id == postId) 
-      return likedPost
+  function checkIfLiked(favorites, postId) {
+    let likedPost = favorites.find((item) => item.id == postId);
+    return likedPost;
   }
-  
-  if(!checkIfLiked(user.favorites, postId)) {
-      
-      postObj.likes += 1
 
-      user.favorites.push(postObj);
-      localStorage.setItem('user', JSON.stringify(user));
+  if (!checkIfLiked(user.favorites, postId)) {
+    postObj.likes += 1;
 
-      await fetch (`${POSTS_API}/${postId}`, {
-          method: 'PATCH',
-          body: JSON.stringify(postObj),
-          headers: {
-              'Content-Type': 'application/json;charset=utf-8'}
-      });
+    user.favorites.push(postObj);
+    localStorage.setItem("user", JSON.stringify(user));
 
-      await fetch(`${USERS_API}/${user.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({favorites: user.favorites}),
-          headers: {
-              'Content-Type': 'application/json;charset=utf-8'}
-      });
-  };
+    await fetch(`${POSTS_API}/${postId}`, {
+      method: "PATCH",
+      body: JSON.stringify(postObj),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    });
+
+    await fetch(`${USERS_API}/${user.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ favorites: user.favorites }),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    });
+  }
 
   user.favorites.push(postObj);
   render();
 
-  return like = true
-
-};
-
-async function putDislike (e) {
-
-  let user = JSON.parse(localStorage.getItem('user'));
-  let postId = e.target.id.split('-')[1];
-
-  let posts = await getPostsData();
-  let postObj = posts.find(item => item.id == postId);
-  // console.log(postObj);
-
-  function checkIfLiked (favorites, postId) {
-      let likedPost = favorites.find(item => item.id == postId) 
-      return likedPost
-  };
-
-  if(postObj.likes === 0) return
-
-  if (checkIfLiked(user.favorites, postId)) {
-      
-      postObj.likes -= 1
-
-      await fetch (`${POSTS_API}/${postId}`, {
-          method: 'PATCH',
-          body: JSON.stringify(postObj),
-          headers: {
-              'Content-Type': 'application/json;charset=utf-8'}
-      });
-
-      let favorites = user.favorites.filter(item => item.id != postId);
-      user.favorites = favorites;
-
-      await fetch(`${USERS_API}/${user.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({favorites: user.favorites}),
-          headers: {
-              'Content-Type': 'application/json;charset=utf-8'}
-      });
-      
-      localStorage.setItem('user', JSON.stringify(user));
-
-  } 
-  render();
-  
-  return like = false
+  return (like = true);
 }
 
+async function putDislike(e) {
+  let user = JSON.parse(localStorage.getItem("user"));
+  let postId = e.target.id.split("-")[1];
 
-{/* <div class="collapse" id="collapseExample">
-<div class="card-comment card-body" id="comment-${item.id}">
-</div>
-</div> */}
+  let posts = await getPostsData();
+  let postObj = posts.find((item) => item.id == postId);
+  // console.log(postObj);
+
+  function checkIfLiked(favorites, postId) {
+    let likedPost = favorites.find((item) => item.id == postId);
+    return likedPost;
+  }
+
+  if (postObj.likes === 0) return;
+
+  if (checkIfLiked(user.favorites, postId)) {
+    postObj.likes -= 1;
+
+    await fetch(`${POSTS_API}/${postId}`, {
+      method: "PATCH",
+      body: JSON.stringify(postObj),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    });
+
+    let favorites = user.favorites.filter((item) => item.id != postId);
+    user.favorites = favorites;
+
+    await fetch(`${USERS_API}/${user.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ favorites: user.favorites }),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    });
+
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+  render();
+
+  return (like = false);
+}
+
 
 function addReadComments () {
   let readBtns = document.querySelectorAll('.read-btn');
   readBtns.forEach(item => item.addEventListener('click', showAllComments))
 }
-// function findCommentContainers () {
-//   let commentContainers = document.querySelectorAll('.comment-container');
-// }
 
 async function showAllComments (e) {
 
@@ -757,47 +758,49 @@ async function showAllComments (e) {
    
   })
  
-
-
 }
 
-function addCommentEvent () {
-  let addCommentBtns = document.querySelectorAll('.comment-btn');
-  addCommentBtns.forEach(item => item.addEventListener('click', addCommentToPosts))
-};
 
-async function addCommentToPosts (e) {
+function addCommentEvent() {
+  let addCommentBtns = document.querySelectorAll(".comment-btn");
+  addCommentBtns.forEach((item) =>
+    item.addEventListener("click", addCommentToPosts)
+  );
+}
 
-  let user = JSON.parse(localStorage.getItem('user'));
+async function addCommentToPosts(e) {
+  let user = JSON.parse(localStorage.getItem("user"));
   let posts = await getPostsData();
-  let postId = e.target.id.split('-')[1];
+  let postId = e.target.id.split("-")[1];
 
-  let commentInputs = document.querySelectorAll('.comment-box');
+  let commentInputs = document.querySelectorAll(".comment-box");
   let commentInputsArr = [...commentInputs];
 
-  let commentInp = commentInputsArr.find(item => item.id.split('-')[1] == postId);
+  let commentInp = commentInputsArr.find(
+    (item) => item.id.split("-")[1] == postId
+  );
 
-  let postObj = posts.find(item => item.id == postId);
+  let postObj = posts.find((item) => item.id == postId);
 
   let commentObj = {
     id: user.id,
     name: user.username,
-    text: commentInp.value
+    text: commentInp.value,
   };
 
   postObj.comments.push(commentObj);
 
-  await fetch (`${POSTS_API}/${postId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(postObj),
-      headers: {
-          'Content-Type': 'application/json;charset=utf-8'}
+  await fetch(`${POSTS_API}/${postId}`, {
+    method: "PATCH",
+    body: JSON.stringify(postObj),
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
   });
 
-  localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem("user", JSON.stringify(user));
 
-  commentInp.value = ''
-
+  commentInp.value = "";
 }
 //search
 

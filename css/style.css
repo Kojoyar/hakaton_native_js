@@ -105,6 +105,11 @@
   justify-content: center;
 }
 /* card-content  */
+.card-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .card-content-description {
   margin-left: 5rem;
 }
@@ -135,61 +140,29 @@
 }
 
 /* footer  */
+/* footer */
 
-.footer {
-  background-color: #1d2830;
-  margin-top: 6rem;
-  font-family: "Open Sans", sans-serif;
-  margin-top: 0;
+footer {
+  background-color: rgb(22, 21, 21);
+  color: white;
 }
-.footer__block {
-  max-width: 1050px;
-  margin: 0 auto;
-  height: 400px;
+.footer__inner {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  width: 90%;
+  margin: auto;
 }
+
 .footer__list {
   display: flex;
-  flex-direction: column;
-  /* padding-left: 14rem; */
+  list-style-type: none;
+  justify-content: space-between;
+  width: 30%;
 }
-.footer__link {
+.main__title {
+  text-decoration: none;
   color: white;
-  text-decoration: none;
-  padding-top: 1rem;
-  font-size: 18px;
-}
-/* .footer__list1 {
-  display: flex;
-  flex-direction: column;
-} */
-.footer__img {
-  padding-top: 2rem;
-}
-.divider {
-  padding-bottom: 1rem;
-  padding-left: 13rem;
-}
-.footer__end {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 1rem;
-}
-.footer__icon {
-  padding-left: 47rem;
-  padding-bottom: 1rem;
-}
-.footer__zogo {
-  color: #d9dbe1;
-}
-.footer__img {
-  padding-left: 0.5rem;
-}
-.btn-saved {
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
 }

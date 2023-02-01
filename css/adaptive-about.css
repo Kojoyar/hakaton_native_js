@@ -1,0 +1,8 @@
+@media all and (max-width: 325px) {
+  .container__title {
+    font-size: 16px;
+  }
+  .cont_img {
+    display: none;
+  }
+}
