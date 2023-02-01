@@ -1,0 +1,132 @@
+.services {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  margin-top: 10rem;
+}
+.service__block {
+  max-width: 1300px;
+  height: 864px;
+  margin: 0 auto;
+}
+.service__flex {
+  display: flex;
+  align-items: center;
+  padding-right: 47px;
+}
+.sevices__title_main {
+  font-family: "Teko", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  text-align: center;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 0;
+  /* margin: 120px 0 50px; */
+}
+.services__list {
+  display: flex;
+  list-style-type: none;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.services__item {
+  width: 20%;
+  margin: 0 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.services__item > img {
+  margin-top: 20px;
+}
+
+.services__title {
+  font-size: 28px;
+  font-weight: 500;
+  margin-top: 0;
+  font-family: "Teko", sans-serif;
+
+  /* margin-bottom: 0; */
+}
+.services__desc {
+  color: #141414;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.service__flex_title {
+  padding-top: 1rem;
+  padding-left: 7px;
+}
+.service__span {
+  font-family: "Open Sans", sans-serif;
+  margin-bottom: 0;
+  padding-right: 6.7rem;
+  color: #99823d;
+  font-weight: 400;
+  font-size: 11px;
+}
+.service__span_1 {
+  color: #99823d;
+  font-family: "Open Sans", sans-serif;
+  margin-bottom: 0;
+  font-weight: 400;
+  font-size: 11px;
+  width: 4%;
+  margin: auto;
+}
+.service__btn {
+  font-family: "Open Sans", sans-serif;
+  width: 30%;
+  height: 68px;
+  /* background: rgb(98, 98, 182); */
+  border: none;
+  color: black;
+  font-weight: 400;
+  font-size: 16px;
+  background: #ffffff;
+  border: solid 2px rgb(98, 98, 182);
+  transition-duration: 0.4s;
+}
+.service__btn:hover {
+  background-color: rgb(98, 98, 182);
+  color: white;
+}
+.services-adap_btn {
+  display: flex;
+  justify-content: center;
+}
+/* card-content  */
+.card-content-description {
+  margin-left: 5rem;
+}
+.card-content-btn {
+  font-family: "Open Sans", sans-serif;
+  width: 40%;
+  height: 58px;
+  /* background: rgb(98, 98, 182); */
+  border: none;
+  color: black;
+  font-weight: 400;
+  font-size: 14px;
+  background: #ffffff;
+  border: solid 2px rgb(98, 98, 182);
+  transition-duration: 0.4s;
+}
+.card-content-btn:hover {
+  background-color: rgb(98, 98, 182);
+  color: white;
+}
+.card-content-link {
+  text-decoration: none;
+  color: blue;
+}
+.card-content-link:hover {
+  color: white;
+}
