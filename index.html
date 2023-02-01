@@ -150,11 +150,11 @@
     <!-- modal for posts -->
 
     <!-- button trigger -->
-    <div class="d-flex justify-content-center mt-2">
-        <button class="btn btn-primary mx-3" data-bs-toggle="modal"
-        data-bs-target="#staticBackdropPost">Add</button>
-        <button class="btn btn-primary mx-3" data-bs-toggle="modal"
-        data-bs-target="#staticBackdropPost">Change</button>
+    <div class="d-flex justify-content-center mt-2" id="btns-block">
+        <button class="btn btn-primary mx-3" id="createPostModal-btn" data-bs-toggle="modal"
+        data-bs-target="#staticBackdropPost">Create Post</button>
+        <button class="btn btn-primary mx-3" id="changePostModal-btn" data-bs-toggle="modal"
+        data-bs-target="#staticBackdropPost">Change Post</button>
     </div>
     <!-- Modal body -->
 
@@ -185,13 +185,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" id="createPost-btn">Create Post</button>
-                <button type="button" class="btn btn-dark" id="changePost-btn">Change Post</button>
+                <button type="button" class="btn btn-dark" id="changePost-btn">Save Changes Post</button>
             </div>
         </div>
     </div>
 </div>
 
-    <div class="d-flex flex-wrap justify-content-center" id="products-list">
+    <div class="d-flex flex-wrap justify-content-center" id="posts-list">
 
     </div>
 
