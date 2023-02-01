@@ -10,6 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&family=Teko&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -38,12 +42,18 @@
                                 <a class="nav-link active" aria-current="page" href="./about.html">O нас</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">Register</a>
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    id="registerUser-modal">Register</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">Login</a>
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    id="loginUser-modal">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#" id="logoutUser-btn">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled" id="showUsername">No user</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -61,7 +71,9 @@
                             </li>
                         </ul>
                         <form class="d-flex" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+
+                            <input class="form-control me-2" id="search-inp" type="search" placeholder="Поиск"
+                                aria-label="Поиск">
                         </form>
                     </div>
                 </div>
@@ -135,7 +147,51 @@
     </div>
 
     <!-- content  -->
-    <div class="d-flex flex-wrap justify-content-center" id="products-list">
+    <!-- modal for posts -->
+
+    <!-- button trigger -->
+    <div class="d-flex justify-content-center mt-2" id="btns-block">
+        <button class="btn btn-primary mx-3" id="createPostModal-btn" data-bs-toggle="modal"
+        data-bs-target="#staticBackdropPost">Create Post</button>
+        <button class="btn btn-primary mx-3" id="changePostModal-btn" data-bs-toggle="modal"
+        data-bs-target="#staticBackdropPost">Change Post</button>
+    </div>
+    <!-- Modal body -->
+
+<div class="modal fade" id="staticBackdropPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropPostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropPostLabel">Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <!-- for create -->
+                <div class="d-flex flex-column w-100 align-items-center" id="postCreate-modal-block">
+                    <h2>Create post</h2>
+                    <input type="text" id="postCreate-title" placeholder="Title" class="mb-2 w-100 form-control">
+                    <input type="text" id="postCreate-content" placeholder="Content" class="mb-2 w-100 form-control">
+                    <input type="text" id="postCreate-image" placeholder="Image url" class="mb-2 w-100 form-control">
+                </div>
+
+                <!-- for change -->
+                <div class="d-flex flex-column w-100 align-items-center" id="postChange-modal-block">
+                    <h2>Change post</h2>
+                    <input type="text" id="postChange-title" placeholder="Title" class="mb-2 w-100 form-control">
+                    <input type="text" id="postChange-content" placeholder="Content" class="mb-2 w-100 form-control">
+                    <input type="text" id="postChange-image" placeholder="Image url" class="mb-2 w-100 form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" id="createPost-btn">Create Post</button>
+                <button type="button" class="btn btn-dark" id="changePost-btn">Save Changes Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="d-flex flex-wrap justify-content-center" id="posts-list">
 
     </div>
 
@@ -252,6 +308,56 @@
             </ul>
             <div class="services-adap_btn">
                 <button class="service__btn">Подробнее</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer  -->
+    <div class="footer">
+        <div class="footer__block">
+            <div class="footer__list">
+                <a href="#" class="footer__link">Company</a>
+                <a href="#" class="footer__link">About Us</a>
+                <a href="#" class="footer__link">Blog</a>
+                <a href="#" class="footer__link">Careers</a>
+                <a href="#" class="footer__link">Contact Us</a>
+            </div>
+
+            <div class="footer__list">
+                <a href="#" class="footer__link">Support</a>
+                <a href="#" class="footer__link">Help Center</a>
+                <a href="#" class="footer__link">Safety Center</a>
+                <a href="#" class="footer__link">Community</a>
+                <a href="#" class="footer__link">Community</a>
+            </div>
+
+            <div class="footer__list">
+                <a href="#" class="footer__link">Legal</a>
+                <a href="#" class="footer__link">Cookies Policy</a>
+                <a href="#" class="footer__link">Privacy Policy</a>
+                <a href="#" class="footer__link">Terms of Service</a>
+                <a href="#" class="footer__link">Terms of Service</a>
+            </div>
+
+            <!-- <div class="footer__list">
+                <a href="#" class="footer__link">Install App</a>
+                <img src="./image/part_1.png" alt="" class="footer__img">
+                <img src="./image/part_2.png" alt="" class="footer__img">
+            </div> -->
+
+        </div>
+        <br>
+        <img src="./image/Divider.png" alt="" class="divider">
+
+
+        <div class="footer__end">
+            <h4 class="footer__zogo">© 2022 - All rights reserved</h4>
+
+            <div class="footer__icon">
+                <img src="./image/inst.png" alt="" class="footer__img">
+                <img src="./image/ball.png" alt="" class="footer__img">
+                <img src="./image/twiter.png" alt="" class="footer__img">
+                <img src="./image/youtube.png" alt="" class="footer__img">
             </div>
         </div>
     </div>
