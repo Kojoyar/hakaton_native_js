@@ -1,31 +1,4 @@
 {
-  "users": [
-    {
-      "username": "Jack",
-      "age": "17",
-      "password": "pass",
-      "isAdmin": true,
-      "id": 1
-    },
-    {
-      "username": "Jika",
-      "age": "27",
-      "password": "pass",
-      "isAdmin": false,
-      "id": 2
-    }
-  ],
-  "posts": [
-    {
-      "title": "Bird beauty lala",
-      "content": "Fliyng jumping",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Eopsaltria_australis_-_Mogo_Campground.jpg/640px-Eopsaltria_australis_-_Mogo_Campground.jpg",
-      "likes": 0,
-      "author": {
-        "id": 2,
-        "name": "Jika"
-      },
-      "id": 2
-    }
-  ]
+  "users": [],
+  "posts": []
 }

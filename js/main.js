@@ -120,15 +120,16 @@ function setUserToStorage(username, isAdmin, id, favorites, saved) {
     JSON.stringify({
       username,
       isAdmin,
-      id,
       favorites,
-      saved
+      saved,
+      id,
     })
   );
 }
 
-function getUserFromStorage(posts) {
-  localStorage.getItem("user", JSON.parse(posts));
+function getUserFromStorage() {
+  let products = JSON.parse(localStorage.getItem("user"));
+  return products;
 }
 
 async function loginUser() {
@@ -158,7 +159,7 @@ async function loginUser() {
   passUsernameInp = "";
 
   checkLoginLogoutStatus();
-  showCreatePostBtns()
+  showCreatePostBtns();
 
   closeRegisterModalBtn.click();
 
@@ -174,68 +175,65 @@ logoutUserBtn.addEventListener("click", () => {
   render();
 });
 
-// logic for CRUD 
+// logic for CRUD
 // create Post
-// connecting to elements 
+// connecting to elements
 
-let createPostModalBtn = document.querySelector('#createPostModal-btn');
-let changePostModalBtn = document.querySelector('#changePostModal-btn');
-console.log(createPostModalBtn, changePostModalBtn);
+let createPostModalBtn = document.querySelector("#createPostModal-btn");
+let changePostModalBtn = document.querySelector("#changePostModal-btn");
 
-let createModalBlock = document.querySelector('#postCreate-modal-block')
-let createPostTitle = document.querySelector('#postCreate-title');
-let createPostContent = document.querySelector('#postCreate-content');
-let createPostImg = document.querySelector('#postCreate-image');
-let createPostBtn = document.querySelector('#createPost-btn');
-console.log(createModalBlock, createPostTitle, createPostContent, createPostImg, createPostBtn);
+let createModalBlock = document.querySelector("#postCreate-modal-block");
+let createPostTitle = document.querySelector("#postCreate-title");
+let createPostContent = document.querySelector("#postCreate-content");
+let createPostImg = document.querySelector("#postCreate-image");
+let createPostBtn = document.querySelector("#createPost-btn");
 
-let changeModalBlock = document.querySelector('#postChange-modal-block')
-let changePostTitle = document.querySelector('#postChange-title');
-let changePostContent = document.querySelector('#postChange-content');
-let changePostImg = document.querySelector('#postChange-image');
-let changePostBtn = document.querySelector('#changePost-btn');
-console.log(changeModalBlock, changePostTitle, changePostContent, changePostImg, changePostBtn);
+let changeModalBlock = document.querySelector("#postChange-modal-block");
+let changePostTitle = document.querySelector("#postChange-title");
+let changePostContent = document.querySelector("#postChange-content");
+let changePostImg = document.querySelector("#postChange-image");
+let changePostBtn = document.querySelector("#changePost-btn");
 
-function checkUserForCreatePost () {
-  let user = JSON.parse(localStorage.getItem('user'));
+function checkUserForCreatePost() {
+  let user = JSON.parse(localStorage.getItem("user"));
 
-  if(user) return user.id;
-  return false
-}; 
+  if (user) return user.id;
+  return false;
+}
 
-function showCreatePostBtns () {
-  let postBtnsBlock = document.querySelector('#btns-block');
+function showCreatePostBtns() {
+  let postBtnsBlock = document.querySelector("#btns-block");
 
-  if(!checkUserForCreatePost()) {
-      postBtnsBlock.setAttribute('style', 'display: none !important;')
+  if (!checkUserForCreatePost()) {
+    postBtnsBlock.setAttribute("style", "display: none !important;");
   } else {
-      postBtnsBlock.setAttribute('style', 'display: flex !important;')
+    postBtnsBlock.setAttribute("style", "display: flex !important;");
   }
-};
+}
 
-showCreatePostBtns()
+showCreatePostBtns();
 
-let closeModalPostBtn = document.querySelector('.btn-close-postModal')
+let closeModalPostBtn = document.querySelector(".btn-close-postModal");
 
-let POSTS_API = ' http://localhost:8000/posts';
+let POSTS_API = " http://localhost:8000/posts";
 
-async function getPostsData () {
+async function getPostsData() {
   let res = await fetch(POSTS_API);
   let posts = await res.json();
-  return posts
-};
+  return posts;
+}
 
-async function createPost () {
-  let user = JSON.parse(localStorage.getItem('user'));
+async function createPost() {
+  let user = JSON.parse(localStorage.getItem("user"));
 
   if (
-      !createPostTitle.value.trim() ||
-      !createPostContent.value.trim() ||
-      !createPostImg.value.trim()
+    !createPostTitle.value.trim() ||
+    !createPostContent.value.trim() ||
+    !createPostImg.value.trim()
   ) {
-      alert('Fill all inputs, some of them are empty!')
-      return
-  };
+    alert("Fill all inputs, some of them are empty!");
+    return;
+  }
 
   let postObj = {
       title: createPostTitle.value,
@@ -249,46 +247,44 @@ async function createPost () {
   };
 
   fetch(POSTS_API, {
-      method: 'POST',
-      body: JSON.stringify(postObj),
-      headers: {'Content-Type': 'application/json; charset=utf-8'}
-  })
+    method: "POST",
+    body: JSON.stringify(postObj),
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+  });
 
-  createPostTitle.value = '';
-  createPostContent.value = '';
-  createPostImg.value = '';
+  createPostTitle.value = "";
+  createPostContent.value = "";
+  createPostImg.value = "";
 
   render()
 
-  closeModalPostBtn.click()
+  closeModalPostBtn.click();
+}
 
-};
+createPostBtn.addEventListener("click", createPost);
 
-createPostBtn.addEventListener('click', createPost)
+//render
 
-//render 
-
-let postsBlock = document.querySelector('#posts-list');
+let postsBlock = document.querySelector("#posts-list");
 
 // let like = false;
 
-async function render () {
+async function render() {
+  postsBlock.innerHTML = "";
 
-    postsBlock.innerHTML = '';
+  let posts = await getPostsData();
+  // console.log(posts);
+  if (posts.length === 0) return;
 
-    let posts = await getPostsData();
-    // console.log(posts);
-    if (posts.length === 0) return;
-
-    posts.forEach(item => {
-        postsBlock.innerHTML += `
+  posts.forEach((item) => {
+    postsBlock.innerHTML += `
         <div class="post">
         <div class="info">
             <div class="user">
                 <div class="profile-pic">
                     <img src="${item.author.image}" alt="">
                 </div>
-                <p class="username">${ item.author.name }</p>
+                <p class="username">${item.author.name}</p>
             </div>
             <!-- Edit Delete -->
             ${checkUserForCreatePost() == item.author.id? 
@@ -308,7 +304,9 @@ async function render () {
             }
 
         </div>
-        <img src="${item.url}" class="post-image img-fluid img-thumbnail" width="100" height="200" alt="">
+        <div class="d-flex flex-wrap justify-content-center align-items-center" >
+        <img src="${item.url}" class="post-image mr-5" width='400' height='400' alt="">
+        </div>
         <div class="post-content">
             <div class="reaction-wrapper">
                 <img src="assets/img/like.PNG" class="icon" alt="">
@@ -326,6 +324,7 @@ async function render () {
             <input type="text" class="comment-box" placeholder="Add a comment">
             <button class="comment-btn">Post</button>
         </div>
+        <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
     </div>
         `
     });
@@ -339,22 +338,15 @@ async function render () {
 };
         
 
-createPostModalBtn.addEventListener('click', () => {
-  createModalBlock.setAttribute('style', 'display: flex !important;');
-  createPostBtn.setAttribute('style', 'display: flex !important;');
-  changeModalBlock.setAttribute('style', 'display: none !important');
-  changePostBtn.setAttribute('style', 'display: none !important');
+
+
+
+changePostModalBtn.addEventListener("click", () => {
+  createModalBlock.setAttribute("style", "display: none !important;");
+  createPostBtn.setAttribute("style", "display: none !important;");
+  changeModalBlock.setAttribute("style", "display: flex !important");
+  changePostBtn.setAttribute("style", "display: flex !important");
 });
-
-changePostModalBtn.addEventListener('click', () => {
-  createModalBlock.setAttribute('style', 'display: none !important;');
-  createPostBtn.setAttribute('style', 'display: none !important;');
-  changeModalBlock.setAttribute('style', 'display: flex !important');
-  changePostBtn.setAttribute('style', 'display: flex !important');
-});
-
-function editModalEvent () {
-
   let editBtns = document.querySelectorAll('.post_edit');
   
   editBtns.forEach(item => item.addEventListener('click', () => {
@@ -364,31 +356,38 @@ function editModalEvent () {
     changePostBtn.setAttribute('style', 'display: flex !important');
   }))
 
-};
+function editModalEvent() {
+  let editBtns = document.querySelectorAll(".btn-edit");
+
+  editBtns.forEach((item) =>
+    item.addEventListener("click", () => {
+      createModalBlock.setAttribute("style", "display: none !important;");
+      createPostBtn.setAttribute("style", "display: none !important;");
+      changeModalBlock.setAttribute("style", "display: flex !important");
+      changePostBtn.setAttribute("style", "display: flex !important");
+    })
+  );
+}
 
 render()
 
 //delete
-
 function addDeleteEvent () {
   let delBtns = document.querySelectorAll('.post_delete');
   delBtns.forEach(item => item.addEventListener('click', deletePost))
 };
 
 async function deletePost (e) {
-
   let postId = e.target.id.split('-')[1];
-
-  await fetch (`${POSTS_API}/${postId}`, {
-      method: 'DELETE'
+  await fetch(`${POSTS_API}/${postId}`, {
+    method: "DELETE",
   });
 
   render();
-
-};
+}
 
 //update
-let saveBtn = document.querySelector('#changePost-btn');
+let saveBtn = document.querySelector("#changePost-btn");
 
 function addEditEvent() {
   let editBtns = document.querySelectorAll('.post_edit');
@@ -396,46 +395,68 @@ function addEditEvent() {
 }
 
 async function addPostDataToForm(e) {
+  let postId = e.target.id.split("-")[1];
 
-  let postId = e.target.id.split('-')[1];
-
-  let res = await fetch (`${POSTS_API}/${postId}`)
+  let res = await fetch(`${POSTS_API}/${postId}`);
   let postObj = await res.json();
 
   changePostTitle.value = postObj.title;
   changePostContent.value = postObj.content;
   changePostImg.value = postObj.url;
 
-  saveBtn.setAttribute('id', postObj.id);
-
+  saveBtn.setAttribute("id", postObj.id);
+}
 };
-
-saveBtn.addEventListener('click', saveChanges)
+saveBtn.addEventListener("click", saveChanges);
 
 async function saveChanges(e) {
-
   let updatedPostObj = {
-      id: e.target.id,
-      title: changePostTitle.value,
-      content: changePostContent.value,
-      url: changePostImg.value
+    id: e.target.id,
+    title: changePostTitle.value,
+    content: changePostContent.value,
+    url: changePostImg.value,
   };
 
-  await fetch (`${POSTS_API}/${e.target.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updatedPostObj),
-      headers: {
-          'Content-Type': 'application/json;charset=utf-8'}
-  })
+  await fetch(`${POSTS_API}/${e.target.id}`, {
+    method: "PATCH",
+    body: JSON.stringify(updatedPostObj),
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+
 
   changePostTitle.value = '';
   changePostContent.value = '';
-  changePostImg.value = ''
+  changePostImg.value = '';
 
   saveBtn.removeAttribute('id');
   closeModalPostBtn.click();
 
   render();
-
 }
 
+// save logic
+function setPostsToStorage(product) {
+  localStorage.setItem("user", JSON.stringify(product));
+}
+async function saveBtnToLocaleStorage() {
+  let postId = e.target.id.split("-")[1];
+  let res = await fetch(POSTS_API);
+  let posts = await res.json();
+  let postObj = await posts.find((i) => i.id == postId);
+
+  let post = await getUserFromStorage();
+  console.log(post);
+  setPostsToStorage(postObj);
+
+  render();
+}
+
+function savePostFunc() {
+  let savePostBtns = document.querySelectorAll("#save-post");
+  console.log(savePostBtns);
+  savePostBtns.forEach((item) =>
+    item.addEventListener("click", saveBtnToLocaleStorage)
+  );
+}
