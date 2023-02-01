@@ -1,4 +1,54 @@
 {
-  "users": [],
-  "posts": []
+  "users": [
+    {
+      "username": "Jika",
+      "age": "27",
+      "password": "pass",
+      "isAdmin": false,
+      "favorites": [],
+      "saved": [],
+      "id": 1
+    },
+    {
+      "username": "Kojo",
+      "age": "17",
+      "password": "pass",
+      "isAdmin": true,
+      "favorites": [],
+      "saved": [],
+      "id": 2
+    }
+  ],
+  "posts": [
+    {
+      "title": "My book",
+      "content": "You should read it",
+      "url": "https://dictionary.cambridge.org/fr/images/thumb/book_noun_001_01679.jpg?version=5.0.288",
+      "likes": 0,
+      "author": {
+        "id": 1,
+        "name": "Jika"
+      },
+      "comments": [
+        {
+          "id": 1,
+          "name": "Jika",
+          "text": "I like it"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "title": "Bird",
+      "content": "Beautiful",
+      "url": "https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_960,f_auto/DCTM_Penguin_UK_DK_AL526630_wkmzns.jpg",
+      "likes": 0,
+      "author": {
+        "id": 1,
+        "name": "Jika"
+      },
+      "comments": [],
+      "id": 2
+    }
+  ]
 }
