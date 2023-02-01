@@ -1,68 +1,7 @@
 {
   "users": [
-    {
-      "username": "Jika",
-      "age": "27",
-      "password": "pass",
-      "isAdmin": false,
-      "favorites": [],
-      "saved": [],
-      "id": 1
-    },
-    {
-      "username": "Kojo",
-      "age": "17",
-      "password": "pass",
-      "isAdmin": true,
-      "favorites": [
-        {
-          "title": "ss",
-          "content": "ss",
-          "url": "ss",
-          "likes": 1,
-          "author": {
-            "id": 2,
-            "name": "Kojo"
-          },
-          "comments": [],
-          "id": 1
-        }
-      ],
-      "saved": [],
-      "id": 2
-    },
-    {
-      "username": "Jack",
-      "age": "17",
-      "password": "pass",
-      "isAdmin": true,
-      "favorites": [],
-      "saved": [],
-      "id": 3
-    },
-    {
-      "username": "Tom",
-      "age": "19",
-      "password": "pass",
-      "isAdmin": true,
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS4giEU5FyugWG9NCbS5qng5Fi-NVgsoN0RnbZMr0OeA&s",
-      "favorites": [],
-      "saved": [],
-      "id": 4
-    }
   ],
   "posts": [
-    {
-      "title": "ss",
-      "content": "ss",
-      "url": "ss",
-      "likes": 1,
-      "author": {
-        "id": 2,
-        "name": "Kojo"
-      },
-      "comments": [],
-      "id": 1
-    }
+    
   ]
 }

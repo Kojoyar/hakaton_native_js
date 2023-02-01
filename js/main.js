@@ -278,20 +278,27 @@ async function createPost() {
 createPostBtn.addEventListener("click", createPost);
 
 //render
+let currentPage = 1;
+let search = '';
 
 let postsBlock = document.querySelector("#posts-list");
 
 let like = false;
 
 async function render() {
+
   postsBlock.innerHTML = "";
 
-  let posts = await getPostsData();
+  let requestAPI = `${POSTS_API}?q=${search}&_page=${currentPage}&_limit=3`;
+
+  let res = await fetch(requestAPI);
+  let posts = await res.json();
+
   if (posts.length === 0) return;
 
   posts.forEach((item) => {
     postsBlock.innerHTML += `
-      <div class="post">
+      <div class="post mx-2">
         <div class="info">
             <div class="user">
                 <div class="profile-pic">
@@ -323,6 +330,7 @@ async function render() {
           item.url
         }" class="post-image mr-5" width='400' height='400' alt="">
         </div>
+        <hr>
         <div class="post-content">
             <div class="reaction-wrapper">
                 <img src="assets/img/like.PNG" class="icon" alt="">
@@ -335,6 +343,7 @@ async function render() {
             <p class="description">${item.content}</p>
             <p class="post-time">${new Date()}</p>
         </div>
+        <hr>
         <!-- Likes -->
         ${
           checkUserForCreatePost()
@@ -349,40 +358,26 @@ async function render() {
           `
             : ""
         }
-        <p>
-          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Read all comments to this post
-          </button>
-        </p>
-        <div class="collapse" id="collapseExample">
-          <div class="card-comment card-body">
-          </div>
+        <div class="comment-container" id="commcontainer-${item.id}">
+            <button class="btn btn-secondary read-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="read-${item.id}">
+              Read all comments to this post
+            </button>
         </div>
     </div>
         `;
   });
-  addDeleteEvent();
-  editModalEvent();
-  addEditEvent();
-  addLikeEvent();
-  savePostFunc();
-  addDislikeEvent();
-  likeBtnsChecks();
-  addCommentEvent();
+
+    addDeleteEvent();
+    editModalEvent ();
+    addEditEvent();
+    addLikeEvent();
+    savePostFunc();
+    addDislikeEvent();
+    likeBtnsChecks();
+    addCommentEvent()
+    addReadComments()
 }
 
-async function check() {
-  let posts = await getPostsData();
-
-  posts.forEach((item) => {
-    item.comments.forEach((i) => {
-      console.log(i.name);
-      console.log(i.text);
-    });
-  });
-}
-
-check();
 
 function likeBtnsChecks() {
   let user = JSON.parse(localStorage.getItem("user"));
@@ -424,7 +419,8 @@ function likeBtnsChecks() {
       item.setAttribute("style", "display: none !important");
     });
   }
-}
+};
+
 
 changePostModalBtn.addEventListener("click", () => {
   createModalBlock.setAttribute("style", "display: none !important;");
@@ -729,13 +725,41 @@ async function putDislike(e) {
   return (like = false);
 }
 
-// comments: [
-//   {id,
-//     name,
-//     text
-//   }
-// ]
-//comments
+
+function addReadComments () {
+  let readBtns = document.querySelectorAll('.read-btn');
+  readBtns.forEach(item => item.addEventListener('click', showAllComments))
+}
+
+async function showAllComments (e) {
+
+  let postId = e.target.id.split('-')[1];
+
+  let posts = await getPostsData();
+  let postObj = posts.find(item => item.id == postId);
+  console.log(postObj);
+
+  postObj.comments.forEach(item => {
+  
+    let card = document.createElement('div');
+    card.innerHTML = ''
+    
+    card.setAttribute('class', 'collapse');
+    card.setAttribute('id', 'collapseExample');
+    
+    card.innerHTML += `
+      <div class="card-comment card-body">
+        <p>Commentator: ${item.name}</p>
+        <p>${item.text}</p>
+        <hr>
+      </div>
+      `
+    e.target.parentNode.append(card);
+   
+  })
+ 
+}
+
 
 function addCommentEvent() {
   let addCommentBtns = document.querySelectorAll(".comment-btn");
@@ -778,3 +802,55 @@ async function addCommentToPosts(e) {
 
   commentInp.value = "";
 }
+//search
+
+let searchInp = document.querySelector('#search-inp');
+
+searchInp.addEventListener('input', () => {
+  search = searchInp.value;
+  currentPage = 1;
+  render();
+});
+
+//pagination
+
+let prevPageBtn = document.querySelector('#prev-page-btn');
+let nextPageBtn = document.querySelector('#next-page-btn');
+
+async function getPagesCount () {
+    let res = await fetch(`${POSTS_API}`);
+    let products = await res.json();
+
+    let pagesCount = Math.ceil(products.length/3);
+    console.log(pagesCount, typeof pagesCount);
+    return pagesCount
+};
+
+async function checkPages () {
+    let maxPageNum = await getPagesCount();
+
+    if(currentPage === 1) {
+        prevPageBtn.setAttribute('style', 'display: none;');
+        nextPageBtn.setAttribute('style', 'display: block;');
+    } else if(currentPage === maxPageNum) {
+        nextPageBtn.setAttribute('style', 'display: none;');
+        prevPageBtn.setAttribute('style', 'display: block;')
+    } else {
+        nextPageBtn.setAttribute('style', 'display: block;');
+        prevPageBtn.setAttribute('style', 'display: block;')
+    };
+};
+
+checkPages();
+
+prevPageBtn.addEventListener('click', () => {
+    currentPage--;
+    checkPages();
+    render();
+});
+
+nextPageBtn.addEventListener('click', () => {
+    currentPage++;
+    checkPages();
+    render();
+});

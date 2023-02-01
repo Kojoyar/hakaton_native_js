@@ -37,10 +37,10 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul data-aos="fade-down" data-aos-duration="1000" class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Главная</a>
+                                <a class="nav-link active" aria-current="page" href="#">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./about.html">O нас</a>
+                                <a class="nav-link active" aria-current="page" href="./about.html">About us</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
@@ -56,24 +56,10 @@
                             <li class="nav-item">
                                 <a class="nav-link disabled" id="showUsername">No user</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Выпадающий список
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Действие</a></li>
-                                    <li><a class="dropdown-item" href="#">Другое действие</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
-                                </ul>
-                            </li>
                         </ul>
                         <form class="d-flex" role="search">
 
-                            <input class="form-control me-2" id="search-inp" type="search" placeholder="Поиск"
+                            <input class="form-control me-2" id="search-inp" type="search" placeholder="Search..."
                                 aria-label="Поиск">
                         </form>
                     </div>
@@ -138,12 +124,12 @@
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
             data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Предыдущий</span>
+            <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
             data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Следующий</span>
+            <span class="visually-hidden">Next</span>
         </button>
     </div>
 
@@ -202,6 +188,17 @@
     </div>
 
     <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn-saved">Posts Saved</a>
+
+        <!-- pagination -->
+        <div class="d-flex w-100 justify-content-center">
+            <a class="btn btn-dark m-1" href="#" aria-label="Previous" id="prev-page-btn">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+            <a class="btn btn-dark m-1" href="#" aria-label="Next" id="next-page-btn">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+        </div>
+        
     <!-- modal for posts  -->
     <!-- Модальное окно -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -226,27 +223,18 @@
         <div data-aos="fade-right" data-aos-duration="1500" class="card mt-5" style="width: 28rem;">
             <img src="./image/card-content-img.jpg" height="400px" class="card-img-top" alt="...">
             <div class="card-body">
-                <p class="card-text">Небольшой пример текста, который должен основываться на названии карточки и
-                    составлять основную часть содержимого карточки.Небольшой пример текста, который должен
-                    основываться
-                    на названии карточки и
-                    составлять основную часть содержимого карточки.</p>
+                <p class="card-text">There are currently over 2 billion monthly active Instagram users. Instagram achieved this mark in the 3rd quarter of 2021 and it is estimated to reach 2.5 billion MAUs by 2023. This number makes Instagram the 4th most popular social media in the world in terms of MAUs.</p>
             </div>
         </div>
 
         <div data-aos="fade-left" data-aos-duration="1500" class="card-content-description" style="width: 500px;">
-            <h1 class="card-content-title">Наши Пользователи</h1>
+            <h1 class="card-content-title">Our users</h1>
             <p class="cart-content-text">
-                Небольшой пример текста, который должен основываться на названии карточки и
-                составлять основную часть содержимого карточки.Небольшой пример текста, который должен основываться
-                на названии карточки и
-                составлять основную часть содержимого карточки.
-                составлять основную часть содержимого карточки.Небольшой пример текста, который должен основываться
-                на названии карточки и
-                составлять основную часть содержимого карточки.
+                The most recent announcement by Meta (Facebook) indicates that 500 million individuals use Instagram on a daily basis globally. That is one in every eight netizens at least once every 24 hours.
+
+                Instagram’s DAUs outnumber the population of the continent of South America.
             </p>
-            <button class="card-content-btn"><a class="card-content-link" href="./about.html">Узнать подробнее о
-                    нас</a></button>
+            <button class="card-content-btn"><a class="card-content-link" href="./about.html">Know more about us</a></button>
         </div>
     </div>
 
@@ -256,13 +244,13 @@
         <div data-aos="fade-up" data-aos-duration="2000" class="service__block">
             <div class="service-adap">
                 <h2 class="sevices__title_main">
-                    Компании с которыми мы сотрудничаем
+                    Our partners
                 </h2>
             </div>
             <ul class="services__list mt-5">
                 <li class="services__item">
                     <div class="service__flex">
-                        <img src="./image/vkontakte.png" alt="#" class="services__icon">
+                        <img src="./image/vk.png" alt="#" class="services__icon" width="60" height="60">
                         <div class="service__flex_title">
                             <h4 class="services__title">VK</h4>
                         </div>
@@ -274,7 +262,7 @@
                 </li>
                 <li class="services__item">
                     <div class="service__flex">
-                        <img src="./image/meta.png" alt="#" class="services__icon">
+                        <img src="./image/meta.png" alt="#" class="services__icon" width="60" height="60">
                         <div class="service__flex_title">
                             <h4 class="services__title">Meta</h4>
                         </div>
@@ -286,7 +274,7 @@
                 </li>
                 <li class="services__item">
                     <div class="service__flex">
-                        <img src="./image/brand.png" alt="#" class="services__icon">
+                        <img src="./image/brand.png" alt="#" class="services__icon" width="60" height="60">
                         <div class="service__flex_title">
                             <h4 class="services__title">Tesla</h4>
                         </div>
@@ -298,7 +286,7 @@
                 </li>
                 <li class="services__item">
                     <div class="service__flex">
-                        <img src="./image/free-icon-amazon-pay-5968220.png" alt="#" class="services__icon">
+                        <img src="./image/amazon-pay.png" alt="#" class="services__icon" width="60" height="60">
                         <div class="service__flex_title">
                             <h4 class="services__title">Amazon</h4>
                         </div>
@@ -310,7 +298,7 @@
                 </li>
                 <li class="services__item">
                     <div class="service__flex">
-                        <img src="./image/free-icon-netflix-2504929 (1).png" alt="#" class="services__icon">
+                        <img src="./image/netflix.png" alt="#" class="services__icon" width="60" height="60">
                         <div class="service__flex_title">
                             <h4 class="services__title">Netflix</h4>
                         </div>
@@ -322,7 +310,7 @@
                 </li>
                 <li class="services__item">
                     <div class="service__flex">
-                        <img src="./image/free-icon-facebook-174848.png" alt="#" class="services__icon">
+                        <img src="./image/facebook.png" alt="#" class="services__icon" width="60" height="60">
                         <div class="service__flex_title">
                             <h4 class="services__title">Facebook</h4>
                         </div>
@@ -334,12 +322,12 @@
                 </li>
             </ul>
             <div class="services-adap_btn">
-                <button class="service__btn">Подробнее</button>
+                <button class="service__btn">Know more</button>
             </div>
         </div>
     </div>
 
-    <!-- footer  -->
+  
     <!-- footer start -->
     <footer>
         <div class="footer__inner">
