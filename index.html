@@ -42,12 +42,18 @@
                                 <a class="nav-link active" aria-current="page" href="./about.html">O нас</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">Register</a>
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    id="registerUser-modal">Register</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">Login</a>
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    id="loginUser-modal">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#" id="logoutUser-btn">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled" id="showUsername">No user</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -65,7 +71,9 @@
                             </li>
                         </ul>
                         <form class="d-flex" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+
+                            <input class="form-control me-2" id="search-inp" type="search" placeholder="Поиск"
+                                aria-label="Поиск">
                         </form>
                     </div>
                 </div>
