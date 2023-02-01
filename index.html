@@ -14,13 +14,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&family=Teko&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="./css/adaptiv-style.css">
 </head>
 
 <body>
 
     <!-- navbar  -->
     <nav class="navbar bg-light navbar-dark">
-        <div class="container-fluid">
+        <div class="container-fluid" id="fluid">
             <a class="navbar-brand " href="#">
                 <img data-aos="fade-down" data-aos-duration="1000" src="./image/instagram-real.png" width="55px"
                     height="55px" alt="" width="30" height="24" class="d-inline-block align-text-top">
@@ -95,6 +96,7 @@
                         <h2>Register user</h2>
                         <input type="text" id="reg-username" placeholder="Username" class="mb-2 w-100 form-control">
                         <input type="text" id="reg-age" placeholder="Age" class="mb-2 w-100 form-control">
+                        <input type="url" id="reg-icon" placeholder="Icon" class="mb-2 w-100 form-control">
                         <input type="password" id="reg-password" placeholder="Password" class="mb-2 w-100 form-control">
                         <input type="password" id="reg-passwordConfirm" placeholder="Password Confirmation"
                             class="mb-2 w-100 form-control">
@@ -220,7 +222,7 @@
         </div>
     </div>
     <!-- card-content  -->
-    <div class="card-content d-flex justify-content-center align-items-center">
+    <div class="card-content">
         <div data-aos="fade-right" data-aos-duration="1500" class="card mt-5" style="width: 28rem;">
             <img src="./image/card-content-img.jpg" height="400px" class="card-img-top" alt="...">
             <div class="card-body">
@@ -338,54 +340,19 @@
     </div>
 
     <!-- footer  -->
-    <div class="footer">
-        <div class="footer__block">
-            <div class="footer__list">
-                <a href="#" class="footer__link">Company</a>
-                <a href="#" class="footer__link">About Us</a>
-                <a href="#" class="footer__link">Blog</a>
-                <a href="#" class="footer__link">Careers</a>
-                <a href="#" class="footer__link">Contact Us</a>
-            </div>
-
-            <div class="footer__list">
-                <a href="#" class="footer__link">Support</a>
-                <a href="#" class="footer__link">Help Center</a>
-                <a href="#" class="footer__link">Safety Center</a>
-                <a href="#" class="footer__link">Community</a>
-                <a href="#" class="footer__link">Community</a>
-            </div>
-
-            <div class="footer__list">
-                <a href="#" class="footer__link">Legal</a>
-                <a href="#" class="footer__link">Cookies Policy</a>
-                <a href="#" class="footer__link">Privacy Policy</a>
-                <a href="#" class="footer__link">Terms of Service</a>
-                <a href="#" class="footer__link">Terms of Service</a>
-            </div>
-
-            <!-- <div class="footer__list">
-                <a href="#" class="footer__link">Install App</a>
-                <img src="./image/part_1.png" alt="" class="footer__img">
-                <img src="./image/part_2.png" alt="" class="footer__img">
-            </div> -->
-
+    <!-- footer start -->
+    <footer>
+        <div class="footer__inner">
+            <a href="#" class="main__title">Instagram</a>
+            <ul class="footer__list">
+                <li class="footer__item">Support</li>
+                <li class="footer__item">Privacy Policy</li>
+                <li class="footer__item">Terms and conditions</li>
+            </ul>
+            <p class="footer__info">© 2023 JSON-server API, All Rights Reserved</p>
         </div>
-        <br>
-        <img src="./image/Divider.png" alt="" class="divider">
-
-
-        <div class="footer__end">
-            <h4 class="footer__zogo">© 2022 - All rights reserved</h4>
-
-            <div class="footer__icon">
-                <img src="./image/inst.png" alt="" class="footer__img">
-                <img src="./image/ball.png" alt="" class="footer__img">
-                <img src="./image/twiter.png" alt="" class="footer__img">
-                <img src="./image/youtube.png" alt="" class="footer__img">
-            </div>
-        </div>
-    </div>
+    </footer>
+    <!-- footer end -->
 
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
