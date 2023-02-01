@@ -65,6 +65,8 @@ async function registerUser() {
     age: ageInp.value,
     password: passwordInp.value,
     isAdmin: isAdminInp.checked,
+    favorites: [],
+    saved: []
   };
 
   fetch(USERS_API, {
@@ -112,7 +114,7 @@ function checkUserPassword(user, password) {
   return user.password === password;
 }
 
-function setUserToStorage(username, isAdmin, favorites, saved, id) {
+function setUserToStorage(username, isAdmin, id, favorites, saved) {
   localStorage.setItem(
     "user",
     JSON.stringify({
@@ -151,13 +153,7 @@ async function loginUser() {
     return;
   }
 
-  setUserToStorage(
-    userObj.username,
-    userObj.isAdmin,
-    userObj.favorites,
-    userObj.saved,
-    userObj.id
-  );
+  setUserToStorage(userObj.username, userObj.isAdmin, userObj.id, userObj.favorites, userObj.saved);
 
   loginUsernameInp = "";
   passUsernameInp = "";
@@ -167,7 +163,7 @@ async function loginUser() {
 
   closeRegisterModalBtn.click();
 
-  //   render();
+    render();
 }
 
 loginUserBtn.addEventListener("click", loginUser);
@@ -176,7 +172,7 @@ loginUserBtn.addEventListener("click", loginUser);
 logoutUserBtn.addEventListener("click", () => {
   localStorage.removeItem("user");
   checkLoginLogoutStatus();
-  //   render();
+  render();
 });
 
 // logic for CRUD
@@ -240,14 +236,14 @@ async function createPost() {
   }
 
   let postObj = {
-    title: createPostTitle.value,
-    content: createPostContent.value,
-    url: createPostImg.value,
-    likes: 0,
-    author: {
-      id: user.id,
-      name: user.username,
-    },
+      title: createPostTitle.value,
+      content: createPostContent.value,
+      url: createPostImg.value,
+      likes: 0,
+      author: {
+          id: user.id,
+          name: user.username,
+      }
   };
 
   fetch(POSTS_API, {
@@ -260,7 +256,7 @@ async function createPost() {
   createPostContent.value = "";
   createPostImg.value = "";
 
-  // render()
+  render()
 
   closeModalPostBtn.click();
 }
@@ -286,20 +282,27 @@ async function render() {
         <div class="info">
             <div class="user">
                 <div class="profile-pic">
-                    <img src="" alt="">
+                    <img src="${item.author.image}" alt="">
                 </div>
                 <p class="username">${item.author.name}</p>
             </div>
             <!-- Edit Delete -->
-            <div class="dropdown">
-                <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                    <i class="fas fa-ellipsis-h"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><a data-bs-toggle="modal" editLsData="${item.id}" data-bs-target="#edit-modal" class="dropdown-item post_edit" href="#">Edit</a></li>
-                <li><a class="dropdown-item post_delete" deleteLsData="${item.id}" href="#">Delete</a></li>
+            ${checkUserForCreatePost() == item.author.id? 
+              `<div class="dropdown">
+              <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-ellipsis-h"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a id="edit-${item.id}" data-bs-toggle="modal"
+              data-bs-target="#staticBackdropPost" class="dropdown-item post_edit" href="#">Edit</a></li>
+              <li><a class="dropdown-item post_delete" id="del-${item.id}" href="#">Delete</a></li>
               </ul>
               </div>
+              `
+              :
+              '' 
+            }
+
         </div>
         <div class="d-flex flex-wrap justify-content-center align-items-center" >
         <img src="${item.url}" class="post-image mr-5" width='400' height='400' alt="">
@@ -311,34 +314,32 @@ async function render() {
                 <img src="assets/img/send.PNG" class="icon" alt="">
                 <img src="assets/img/save.PNG" class="save icon" alt="">
             </div>
-            <p class="likes">89 likes</p>
-            <p>${item.title}</p>
-            <p class="description">${item.content}</p>
+            <p class="likes">${item.likes} likes</p>
+            <p>${ item.title }</p>
+            <p class="description">${ item.content }</p>
+            <p class="post-time">${new Date()}</p>
         </div>
         <div class="comment-wrapper">
             <img src="assets/img/smile.PNG" class="icon" alt="">
             <input type="text" class="comment-box" placeholder="Add a comment">
             <button class="comment-btn">Post</button>
         </div>
-        <button id='save-${item.id}' class='mt-3 save-post'>Сохранить пост</button>
+        <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
     </div>
-        `;
-  });
+        `
+    });
 
-  addDeleteEvent();
-  addEditEvent();
-  // addLikeEvent();
-  // addDislikeEvent();
-  savePostFunc();
-  editModalEvent();
-}
+    addDeleteEvent();
+    editModalEvent ();
+    addEditEvent();
+    // addLikeEvent();
+    // addDislikeEvent();
+    
+};
+        
 
-createPostModalBtn.addEventListener("click", () => {
-  createModalBlock.setAttribute("style", "display: flex !important;");
-  createPostBtn.setAttribute("style", "display: flex !important;");
-  changeModalBlock.setAttribute("style", "display: none !important");
-  changePostBtn.setAttribute("style", "display: none !important");
-});
+
+
 
 changePostModalBtn.addEventListener("click", () => {
   createModalBlock.setAttribute("style", "display: none !important;");
@@ -346,6 +347,14 @@ changePostModalBtn.addEventListener("click", () => {
   changeModalBlock.setAttribute("style", "display: flex !important");
   changePostBtn.setAttribute("style", "display: flex !important");
 });
+  let editBtns = document.querySelectorAll('.post_edit');
+  
+  editBtns.forEach(item => item.addEventListener('click', () => {
+    createModalBlock.setAttribute('style', 'display: none !important;');
+    createPostBtn.setAttribute('style', 'display: none !important;');
+    changeModalBlock.setAttribute('style', 'display: flex !important');
+    changePostBtn.setAttribute('style', 'display: flex !important');
+  }))
 
 function editModalEvent() {
   let editBtns = document.querySelectorAll(".btn-edit");
@@ -360,17 +369,16 @@ function editModalEvent() {
   );
 }
 
-render();
+render()
 
 //delete
-function addDeleteEvent() {
-  let delBtns = document.querySelectorAll(".btn-delete");
-  delBtns.forEach((item) => item.addEventListener("click", deletePost));
-}
+function addDeleteEvent () {
+  let delBtns = document.querySelectorAll('.post_delete');
+  delBtns.forEach(item => item.addEventListener('click', deletePost))
+};
 
-async function deletePost(e) {
-  let postId = e.target.id.split("-")[1];
-
+async function deletePost (e) {
+  let postId = e.target.id.split('-')[1];
   await fetch(`${POSTS_API}/${postId}`, {
     method: "DELETE",
   });
@@ -382,8 +390,8 @@ async function deletePost(e) {
 let saveBtn = document.querySelector("#changePost-btn");
 
 function addEditEvent() {
-  let editBtns = document.querySelectorAll(".btn-edit");
-  editBtns.forEach((item) => item.addEventListener("click", addPostDataToForm));
+  let editBtns = document.querySelectorAll('.post_edit');
+  editBtns.forEach(item => item.addEventListener('click', addPostDataToForm))
 }
 
 async function addPostDataToForm(e) {
@@ -397,10 +405,8 @@ async function addPostDataToForm(e) {
   changePostImg.value = postObj.url;
 
   saveBtn.setAttribute("id", postObj.id);
-
-  // checkCreateAndSaveBtn();
 }
-
+};
 saveBtn.addEventListener("click", saveChanges);
 
 async function saveChanges(e) {
@@ -419,13 +425,13 @@ async function saveChanges(e) {
     },
   });
 
-  changePostTitle.value = "";
-  changePostContent.value = "";
-  changePostImg.value;
 
-  // saveBtn.removeAttribute('id');
+  changePostTitle.value = '';
+  changePostContent.value = '';
+  changePostImg.value = '';
 
-  // checkCreateAndSaveBtn();
+  saveBtn.removeAttribute('id');
+  closeModalPostBtn.click();
 
   render();
 }
