@@ -118,6 +118,7 @@ function setUserToStorage(username, isAdmin) {
     JSON.stringify({
       username,
       isAdmin,
+      id: Date.now()
     })
   );
 }
@@ -153,6 +154,7 @@ async function loginUser() {
   passUsernameInp = "";
 
   checkLoginLogoutStatus();
+  showCreatePostBtns()
 
   closeRegisterModalBtn.click();
 
@@ -207,6 +209,10 @@ function showCreatePostBtns () {
   }
 };
 
+showCreatePostBtns()
+
+let closeModalPostBtn = document.querySelector('.btn-close-postModal')
+
 let POSTS_API = ' http://localhost:8000/posts';
 
 async function getPostsData () {
@@ -250,6 +256,8 @@ async function createPost () {
 
   // render()
 
+  closeModalPostBtn.click()
+
 };
 
 createPostBtn.addEventListener('click', createPost)
@@ -258,7 +266,7 @@ createPostBtn.addEventListener('click', createPost)
 
 let postsBlock = document.querySelector('#posts-list');
 
-let like = false;
+// let like = false;
 
 async function render () {
 
@@ -270,41 +278,82 @@ async function render () {
 
     posts.forEach(item => {
         postsBlock.innerHTML += `
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">${item.title}</h5>
-                <p class="card-text">${item.content}</p>
-                <p class="card-text"><b>Author</b>: ${item.author.name}</p>
-                <img src="${item.url}">
-                    <div class="d-flex">
-                        <p class="likes-num">${item.likes}</p>
-                        <img src="https://cdn-icons-png.flaticon.com/512/1029/1029183.png" width="30" height="30">
-                    </div>
-                    ${checkUserForCreatePost() == item.author.id? 
-                    `<a href="#" class="btn btn-dark btn-edit" id="edit-${item.id}">EDIT</a>
-                    <a href="#" class="btn btn-danger btn-delete" id=del-${item.id}>DELETE</a>
-                    `
-                    :
-                    '' 
-                    }
-                    ${checkUserForCreatePost() ? 
-                        `<button class="btn btn-primary like-btn" id="like-${item.id}">Like</button>
-                        <button class="btn btn-primary dislike-btn" id="dislike-${item.id}">DisLike</button>
-                        `
-                        :
-                        '' 
-                    }
+        <div class="post">
+        <div class="info">
+            <div class="user">
+                <div class="profile-pic">
+                    <img src="" alt="">
+                </div>
+                <p class="username">${ item.author.name }</p>
             </div>
+            <!-- Edit Delete -->
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="fas fa-ellipsis-h"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a data-bs-toggle="modal" editLsData="${item.id}" data-bs-target="#edit-modal" class="dropdown-item post_edit" href="#">Edit</a></li>
+                <li><a class="dropdown-item post_delete" deleteLsData="${item.id}" href="#">Delete</a></li>
+              </ul>
+              </div>
         </div>
+        <img src="${ item.url }" class="post-image" alt="">
+        <div class="post-content">
+            <div class="reaction-wrapper">
+                <img src="assets/img/like.PNG" class="icon" alt="">
+                <img src="assets/img/comment.PNG" class="icon" alt="">
+                <img src="assets/img/send.PNG" class="icon" alt="">
+                <img src="assets/img/save.PNG" class="save icon" alt="">
+            </div>
+            <p class="likes">89 likes</p>
+            <p>${ item.title }</p>
+            <p class="description">${ item.content }</p>
+            <p class="post-time">${new Date()}</p>
+        </div>
+        <div class="comment-wrapper">
+            <img src="assets/img/smile.PNG" class="icon" alt="">
+            <input type="text" class="comment-box" placeholder="Add a comment">
+            <button class="comment-btn">Post</button>
+        </div>
+    </div>
         `
     });
 
     addDeleteEvent();
     addEditEvent();
-    addLikeEvent();
-    addDislikeEvent();
+    // addLikeEvent();
+    // addDislikeEvent();
+    editModalEvent ()
     
 };
+
+createPostModalBtn.addEventListener('click', () => {
+  createModalBlock.setAttribute('style', 'display: flex !important;');
+  createPostBtn.setAttribute('style', 'display: flex !important;');
+  changeModalBlock.setAttribute('style', 'display: none !important');
+  changePostBtn.setAttribute('style', 'display: none !important');
+});
+
+changePostModalBtn.addEventListener('click', () => {
+  createModalBlock.setAttribute('style', 'display: none !important;');
+  createPostBtn.setAttribute('style', 'display: none !important;');
+  changeModalBlock.setAttribute('style', 'display: flex !important');
+  changePostBtn.setAttribute('style', 'display: flex !important');
+});
+
+function editModalEvent () {
+
+  let editBtns = document.querySelectorAll('.btn-edit');
+  
+  editBtns.forEach(item => item.addEventListener('click', () => {
+    createModalBlock.setAttribute('style', 'display: none !important;');
+    createPostBtn.setAttribute('style', 'display: none !important;');
+    changeModalBlock.setAttribute('style', 'display: flex !important');
+    changePostBtn.setAttribute('style', 'display: flex !important');
+  }))
+
+};
+
 
 render()
 
@@ -328,19 +377,7 @@ async function deletePost (e) {
 };
 
 //update
-// let saveBtn = document.querySelector('#changePost-btn');
-
-// function checkCreateAndSaveBtn() {
-//     if(saveBtn.id) {
-//         addPostBtn.setAttribute('style', 'display: none;');
-//         saveBtn.setAttribute('style', 'display: block;');
-//     } else {
-//         addPostBtn.setAttribute('style', 'display: block;');
-//         saveBtn.setAttribute('style', 'display: none;');
-//     };
-// };
-
-// checkCreateAndSaveBtn();
+let saveBtn = document.querySelector('#changePost-btn');
 
 function addEditEvent() {
   let editBtns = document.querySelectorAll('.btn-edit');
@@ -360,7 +397,7 @@ async function addPostDataToForm(e) {
 
   saveBtn.setAttribute('id', postObj.id);
 
-  checkCreateAndSaveBtn();
+  // checkCreateAndSaveBtn();
 };
 
 saveBtn.addEventListener('click', saveChanges)
