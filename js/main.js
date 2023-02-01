@@ -243,7 +243,8 @@ async function createPost() {
       author: {
           id: user.id,
           name: user.username,
-      }
+      },
+      comments: []
   };
 
   fetch(POSTS_API, {
@@ -267,7 +268,7 @@ createPostBtn.addEventListener("click", createPost);
 
 let postsBlock = document.querySelector("#posts-list");
 
-// let like = false;
+let like = false;
 
 async function render() {
   postsBlock.innerHTML = "";
@@ -278,7 +279,7 @@ async function render() {
 
   posts.forEach((item) => {
     postsBlock.innerHTML += `
-        <div class="post">
+      <div class="post">
         <div class="info">
             <div class="user">
                 <div class="profile-pic">
@@ -302,7 +303,6 @@ async function render() {
               :
               '' 
             }
-
         </div>
         <div class="d-flex flex-wrap justify-content-center align-items-center" >
         <img src="${item.url}" class="post-image mr-5" width='400' height='400' alt="">
@@ -319,27 +319,102 @@ async function render() {
             <p class="description">${ item.content }</p>
             <p class="post-time">${new Date()}</p>
         </div>
-        <div class="comment-wrapper">
+        <!-- Likes -->
+        ${checkUserForCreatePost() ? 
+          `<button class="btn btn-primary like-btn" id="like-${item.id}">Like</button>
+          <button class="btn btn-primary dislike-btn" id="dislike-${item.id}">DisLike</button>
+          <div class="comment-wrapper">
             <img src="assets/img/smile.PNG" class="icon" alt="">
-            <input type="text" class="comment-box" placeholder="Add a comment">
-            <button class="comment-btn">Post</button>
+            <input type="text" class="comment-box" placeholder="Add a comment" id="commentinp-${item.id}">
+            <button class="comment-btn" id="commentbtn-${item.id}">Post</button>
+          </div>
+          <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
+          `
+          :
+          '' 
+        }
+        <p>
+          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Read all comments to this post
+          </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+          <div class="card-comment card-body">
+          </div>
         </div>
-        <button id='save-${item.id}' class='mt-3 save-post'>Save Post</button>
     </div>
+
         `
-    });
+    }
+ );
 
     addDeleteEvent();
     editModalEvent ();
     addEditEvent();
-    // addLikeEvent();
-    // addDislikeEvent();
+    addLikeEvent();
+    addDislikeEvent();
+    likeBtnsChecks();
+    addCommentEvent()
     
 };
-        
 
 
+async function check () {
+  let posts = await getPostsData();
 
+  posts.forEach(item => {
+    item.comments.forEach(i => {
+      console.log(i.name)
+      console.log(i.text)
+  });
+  })
+
+}
+
+check()
+
+
+function likeBtnsChecks () {
+  let user = JSON.parse(localStorage.getItem('user'));
+    if(!user) return
+    // console.log(user.favorites);
+
+    let dislikeBtns = document.querySelectorAll('.dislike-btn');
+    // console.log(dislikeBtns);
+    let likeBtns = document.querySelectorAll('.like-btn');
+    // console.log(likeBtns);
+    let newArrDislike = [];
+    let newArrLike = [];
+
+    if(user.favorites) {
+        let newArrdisLikeBtns = [...dislikeBtns];
+        newArrdisLikeBtns.map(function(item){
+            user.favorites.forEach(i => {
+                if(item.id.split('-')[1] == i.id) {
+                    console.log(item)
+                    newArrDislike.push(item)
+                }
+            })
+        })
+        // console.log(newArr)
+        newArrdisLikeBtns.forEach(item => {
+            item.setAttribute('style', 'display: block !important');
+        });
+
+        let newArrLikeBtns = [...likeBtns];
+        newArrLikeBtns.map(function(item){
+            user.favorites.forEach(i => {
+                if(item.id.split('-')[1] == i.id) {
+                    newArrLike.push(item)
+                }
+            })
+        })
+        console.log(newArrLike)
+        newArrLike.forEach(item => {
+            item.setAttribute('style', 'display: none !important');
+        });
+    } 
+}
 
 changePostModalBtn.addEventListener("click", () => {
   createModalBlock.setAttribute("style", "display: none !important;");
@@ -347,17 +422,16 @@ changePostModalBtn.addEventListener("click", () => {
   changeModalBlock.setAttribute("style", "display: flex !important");
   changePostBtn.setAttribute("style", "display: flex !important");
 });
-  let editBtns = document.querySelectorAll('.post_edit');
-  
-  editBtns.forEach(item => item.addEventListener('click', () => {
-    createModalBlock.setAttribute('style', 'display: none !important;');
-    createPostBtn.setAttribute('style', 'display: none !important;');
-    changeModalBlock.setAttribute('style', 'display: flex !important');
-    changePostBtn.setAttribute('style', 'display: flex !important');
-  }))
+
+createPostModalBtn.addEventListener("click", () => {
+  createModalBlock.setAttribute("style", "display: flex !important;");
+  createPostBtn.setAttribute("style", "display: flex !important;");
+  changeModalBlock.setAttribute("style", "display: none !important");
+  changePostBtn.setAttribute("style", "display: none !important");
+});
 
 function editModalEvent() {
-  let editBtns = document.querySelectorAll(".btn-edit");
+  let editBtns = document.querySelectorAll(".post_edit");
 
   editBtns.forEach((item) =>
     item.addEventListener("click", () => {
@@ -406,7 +480,7 @@ async function addPostDataToForm(e) {
 
   saveBtn.setAttribute("id", postObj.id);
 }
-};
+
 saveBtn.addEventListener("click", saveChanges);
 
 async function saveChanges(e) {
@@ -459,4 +533,152 @@ function savePostFunc() {
   savePostBtns.forEach((item) =>
     item.addEventListener("click", saveBtnToLocaleStorage)
   );
+}
+
+
+//like
+
+function addLikeEvent () {
+  let likeBtns = document.querySelectorAll('.like-btn');
+  likeBtns.forEach(item => item.addEventListener('click', putLike))
+}
+
+function addDislikeEvent () {
+  let dislikeBtns = document.querySelectorAll('.dislike-btn');
+  dislikeBtns.forEach(item => item.addEventListener('click', putDislike))
+}
+
+async function putLike (e) {
+
+  let user = JSON.parse(localStorage.getItem('user'));
+  let postId = e.target.id.split('-')[1];
+
+  let posts = await getPostsData();
+  let postObj = posts.find(item => item.id == postId);
+  // console.log(postObj);
+
+  function checkIfLiked (favorites, postId) {
+      let likedPost = favorites.find(item => item.id == postId) 
+      return likedPost
+  }
+  
+  if(!checkIfLiked(user.favorites, postId)) {
+      
+      postObj.likes += 1
+
+      user.favorites.push(postObj);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      await fetch (`${POSTS_API}/${postId}`, {
+          method: 'PATCH',
+          body: JSON.stringify(postObj),
+          headers: {
+              'Content-Type': 'application/json;charset=utf-8'}
+      });
+
+      await fetch(`${USERS_API}/${user.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({favorites: user.favorites}),
+          headers: {
+              'Content-Type': 'application/json;charset=utf-8'}
+      });
+  };
+
+  user.favorites.push(postObj);
+  render();
+
+  return like = true
+
+};
+
+async function putDislike (e) {
+
+  let user = JSON.parse(localStorage.getItem('user'));
+  let postId = e.target.id.split('-')[1];
+
+  let posts = await getPostsData();
+  let postObj = posts.find(item => item.id == postId);
+  // console.log(postObj);
+
+  function checkIfLiked (favorites, postId) {
+      let likedPost = favorites.find(item => item.id == postId) 
+      return likedPost
+  };
+
+  if(postObj.likes === 0) return
+
+  if (checkIfLiked(user.favorites, postId)) {
+      
+      postObj.likes -= 1
+
+      await fetch (`${POSTS_API}/${postId}`, {
+          method: 'PATCH',
+          body: JSON.stringify(postObj),
+          headers: {
+              'Content-Type': 'application/json;charset=utf-8'}
+      });
+
+      let favorites = user.favorites.filter(item => item.id != postId);
+      user.favorites = favorites;
+
+      await fetch(`${USERS_API}/${user.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({favorites: user.favorites}),
+          headers: {
+              'Content-Type': 'application/json;charset=utf-8'}
+      });
+      
+      localStorage.setItem('user', JSON.stringify(user));
+
+  } 
+  render();
+  
+  return like = false
+}
+
+// comments: [
+//   {id,
+//     name,
+//     text
+//   }
+// ]
+//comments 
+
+function addCommentEvent () {
+  let addCommentBtns = document.querySelectorAll('.comment-btn');
+  addCommentBtns.forEach(item => item.addEventListener('click', addCommentToPosts))
+};
+
+async function addCommentToPosts (e) {
+
+  let user = JSON.parse(localStorage.getItem('user'));
+  let posts = await getPostsData();
+  let postId = e.target.id.split('-')[1];
+
+  let commentInputs = document.querySelectorAll('.comment-box');
+  let commentInputsArr = [...commentInputs];
+
+  let commentInp = commentInputsArr.find(item => item.id.split('-')[1] == postId);
+
+  let postObj = posts.find(item => item.id == postId);
+
+  let commentObj = {
+    id: user.id,
+    name: user.username,
+    text: commentInp.value
+  };
+
+  postObj.comments.push(commentObj);
+
+  await fetch (`${POSTS_API}/${postId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(postObj),
+      headers: {
+          'Content-Type': 'application/json;charset=utf-8'}
+  });
+
+  localStorage.setItem('user', JSON.stringify(user));
+
+  commentInp.value = ''
+
 }
